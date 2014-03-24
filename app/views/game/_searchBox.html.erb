@@ -18,8 +18,12 @@
 			</div>
 		</div>
 	</div>
-        <div>
-          <%= button_tag("Sports", name: "genre", value: "Sports") %>
-
+        <div class = "Input">
+          <!--<%= button_tag("Sports", name: "genre", value: "Sports") %> -->
+          <p>Genres:</p>
+          <div style="width:20%">
+            <%= @options = options_for_select(GameSearchHelper.get_genres, params[:genre]) %>
+            <%= select_tag(:genre, @options) %>
+          </div>
         </div>
 <% end %>
