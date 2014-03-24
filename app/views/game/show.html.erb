@@ -70,12 +70,13 @@
 	    <button class="btn btn-default history" id="/json?id=<%=@game.id%>" >
 	    	Price History
 	    </button>
-        <div class="container">
-        <div class="row">
-            <div id="historydiv" class="col-md-4 col-md-offset-4">
+        <div class="container-fluid">
+            <div class="row-fluid">
+                <div id="historydiv"></div>
+                <div id="historygraph" class="span4"></div>
+                <div id="historytable" class="span3 offset6"></div>            
             </div>
         </div>
-    </div>
 	  <!--
 	  	<div class = "container">
 		    <div class = "row">
