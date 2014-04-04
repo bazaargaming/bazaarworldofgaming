@@ -1,6 +1,6 @@
 <%= form_tag("/game/search", method: "get") do %>
-	<%= text_field_tag(:stuff) %>
-	<%= submit_tag("Search") %>
+	<%= text_field_tag(:stuff, params[:stuff]) %>
+	<%= button_tag("Search", name: "type", value: "name") %>
 	<div>
 		<div class = "Input">
 			<div class "form-inline">
