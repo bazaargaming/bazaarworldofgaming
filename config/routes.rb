@@ -9,6 +9,7 @@ Bazaarworldofgaming::Application.routes.draw do
   #get "game/show"
   get "game/search"
   post "game/add"
+  resources :json, only: [:index]
   resources :game 
 
   match '/signup',  to: 'users#new',            via: 'get'
