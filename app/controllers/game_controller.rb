@@ -7,15 +7,14 @@ class GameController < ApplicationController
   def search
   	#@results = Game.find_by_title(params[:stuff])
      @results = nil
-     if params[:type] == 'name'
+     if params[:genre] ==nil
        if signed_in? && current_user.filter
          @results = GameSearchHelper.find_and_filter_games(params[:stuff],current_user)
        else
          @results = GameSearchHelper.find_game(params[:stuff])
        end
-     end
-     if params[:type] == 'genre'
-       @results = GameSearchHelper.find_games_by_genre([:stuff])
+     else
+       @results = GameSearchHelper.find_games_by_genre(params[:genre])
      end     
 	   if params[:method] == '1'
 		   @results = GameSearchHelper.sort_games_by_metacritic_desc(@results)

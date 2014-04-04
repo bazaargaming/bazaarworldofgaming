@@ -352,6 +352,7 @@ module GameSearchHelper
 
 
   def self.find_games_by_genre(genre)
+    puts genre
     games_found = Game.where("genres LIKE ?", "%" + genre + "%")
     GameSearchHelper.genre_map.each do |overlap_genres|
       if overlap_genres.include?(genre)
