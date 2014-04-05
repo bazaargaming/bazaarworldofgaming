@@ -177,17 +177,11 @@ describe GameSearchHelper do
 			expect(GameSearchHelper.are_games_same(@haloinfo[:search_title], @assassininfo[:search_title], @haloinfo[:description], @assassininfo[:description])).to be_false
 			
 			halo_search_title = @haloinfo[:search_title]
-			assassin_search_title = @assassininfo[:search_title]
+			@haloinfo[:search_title] = @haloinfo[:search_title] + " super heroes"
+			Game.create(@haloinfo)
 			
-			@haloinfo[:search_title] = @haloinfo[:search_title] + " superheroes"
-			@assassininfo[:search_title] = @assassininfo[:search_title] + " super heroes"
+			expect(GameSearchHelper.are_games_same(@haloinfo[:search_title], halo_search_title+" superheroes", @haloinfo[:description], @assassininfo[:description])).to be_true
 			
-			expect(GameSearchHelper.are_games_same(@haloinfo[:search_title], @assassininfo[:search_title], @haloinfo[:description], @assassininfo[:description])).to be_true
-			
-			@haloinfo[:search_title] = halo_search_title + " civilization"
-			@assassininfo[:search_title] = assassin_search_title + " sid meiers civilization"
-			
-			expect(GameSearchHelper.are_games_same(@haloinfo[:search_title], @assassininfo[:search_title], @haloinfo[:description], @assassininfo[:description])).to be_true
 		end
 
  	end
