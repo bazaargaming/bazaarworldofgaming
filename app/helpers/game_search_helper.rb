@@ -5,6 +5,15 @@ require 'restclient'
 
 
 module GameSearchHelper
+
+  def self.genre_map
+   [["shooter"],["action"],["adventure"],["sandbox"],["racing"],["horror"],["MMO", "MMOs"],["Role-Playing","RPGs"],
+    ["strategy"],["sports"],["stealth"],
+    ["simulation","Construction and Management Simulation","Vehicle Simulation","Life Simulation","Flight Simulation"],
+    ["Fighting"],["Puzzle"],["Platform"],["Music"],["Family"], ["Indie"], ["Educational"], ["Mac"]]
+
+
+  end
   def self.potential_messed_up_words
     [["super heroes", "superheroes"],["civilization", "sid meiers civilization"], ["standard edition", ""], ["40k", "40000"], ["2","ii"], ["goty", "game of the year"], ["goty", "game of the year edition"], ["digital edition", ""] ]
   end
@@ -342,10 +351,45 @@ module GameSearchHelper
   end
 
 
+  def self.find_games_by_genre(genre)
+    puts genre
+    games_found = Game.where("genres LIKE ?", "%" + genre + "%")
+    GameSearchHelper.genre_map.each do |overlap_genres|
+      if overlap_genres.include?(genre)
+        overlap_genres.each do |alternative_genre|
+          if alternative_genre != genre
+            alternative_list = Game.where("genres LIKE ?", "%" + alternative_genre + "%")
+            games_found = games_found | alternative_list
+          end
+        end
+      end
 
 
+    end
+  
+    puts "games found:"
+    games_found.each do |game|
+      puts game.search_title
+    end
 
 
+  end
+
+
+  def self.find_all_genres
+    games = Game.all
+    genre_list = []
+    games.each do |game|
+      game.genres.each do |genre|
+        if ! genre_list.include?(genre)
+          genre_list.push(genre)
+        end
+      end
+
+    end
+
+    puts genre_list
+  end
 
 
 

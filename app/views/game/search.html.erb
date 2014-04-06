@@ -16,28 +16,7 @@
 			</form>
 		</div> -->
 
-		<%= form_tag("/game/search", method: "get") do %>
-		<%= text_field_tag(:stuff, params[:stuff]) %>
-		<%= submit_tag("Search") %>
-		<div>
-			<div class = "Input">
-				<div class "form-inline">
-					sort by: 
-					<%= radio_button_tag(:method, '0') %>
-					relavance
-					<%= radio_button_tag(:method, '1') %>
-					rating: high to low
-					<%= radio_button_tag(:method, '2') %>
-					rating: low to high
-					<br>show games with rating from
-					<%= text_field_tag(:low, 0) %>
-					to
-					<%= text_field_tag(:high, 100) %>
-				</div>
-			</div>
-		</div>
-		<% end %>
-
+		<%= render 'game/searchBox' %>
 
 		
 
