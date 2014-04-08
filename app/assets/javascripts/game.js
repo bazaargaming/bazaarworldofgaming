@@ -6,6 +6,7 @@
         $("#historygraph").hide();
     	$(".history").click(function(){
             $(".history").hide();
+            $("#history").prepend("<h3 class=\"header3\">Price History</h3>")
         	var link = $(this).attr('id');
         	$("#historydiv").html(
         		"<img src=\"http://jimpunk.net/Loading/wp-content/uploads/loading1.gif\"/>"
