@@ -391,7 +391,6 @@ module GameSearchHelper
       if method == '0'
         games_found.sort!{|x,y| x.search_title <=> y.search_title}
       end
-      return games_found
     end
   
     puts "games found:"
