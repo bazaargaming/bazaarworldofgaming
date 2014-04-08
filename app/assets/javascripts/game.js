@@ -1,16 +1,23 @@
 // Place all the behaviors and hooks related to the matching controller here.
 // All this logic will automatically be available in application.js.
     $(document).ready(function(){
+        $("#historydiv").hide();
+        $("#historytable").hide();
+        $("#historygraph").hide();
     	$(".history").click(function(){
             $(".history").hide();
         	var link = $(this).attr('id');
         	$("#historydiv").html(
         		"<img src=\"http://jimpunk.net/Loading/wp-content/uploads/loading1.gif\"/>"
 			);
+            $("#historydiv").show();
            // $(window).scrollTop($("#history").offset().top + $("#history").height );
         	$.getJSON(link, function(data){
                 $("#historydiv").hide();
-        		htmlstr = "<br /><table class=\"table table-bordered table-striped\"><tr><td>Occurred</td><td>Store</td><td>price</td></tr>";
+                $("#historytable").show();
+                $("#historygraph").show();
+
+                htmlstr = "<br /><table class=\"table table-bordered table-striped\"><tr><td>Occurred</td><td>Store</td><td>price</td></tr>";
         		$.each(data,function(index,item){
         			var datetime = new Date(item.occurred);
         			var date = (datetime.getMonth()+1) + "/" + datetime.getDate() + "/" + datetime.getFullYear();
