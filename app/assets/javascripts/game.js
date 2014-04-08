@@ -1,7 +1,6 @@
 // Place all the behaviors and hooks related to the matching controller here.
 // All this logic will automatically be available in application.js.
     $(document).ready(function(){
-        $("#history").hide();
     	$(".history").click(function(){
             $(".history").hide();
         	var link = $(this).attr('id');
@@ -9,9 +8,8 @@
         		"<img src=\"http://jimpunk.net/Loading/wp-content/uploads/loading1.gif\"/>"
 			);
            // $(window).scrollTop($("#history").offset().top + $("#history").height );
-            $("#history").slideToggle();
         	$.getJSON(link, function(data){
-                $("#history").slideToggle();
+                $("#historydiv").hide();
         		htmlstr = "<br /><table class=\"table table-bordered table-striped\"><tr><td>Occurred</td><td>Store</td><td>price</td></tr>";
         		$.each(data,function(index,item){
         			var datetime = new Date(item.occurred);
@@ -21,8 +19,7 @@
         		htmlstr += "</table>";
                 $("#historydiv").html("");
         		$("#historytable").html(htmlstr);
-             //   $(window).scrollTop($("#history").offset().top + $("#history").height );
-                $("#history").slideToggle();
+            
                 
         	});
 

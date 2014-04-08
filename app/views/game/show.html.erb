@@ -72,14 +72,16 @@
             <%end%>
             </div>
         </div>
-        <div class="row well span9" id="history">
-	       <button class="btn btn-default history offset2" id="/json?id=<%=@game.id%>" >
+        <div class="row">
+            <div class="well span9 offset2" id="history">
+	           <button class="btn btn-default history" id="/json?id=<%=@game.id%>">
 	    	  Price History
-	       </button>
-            <br />
-            <div id="historydiv" class="span6 offset3"></div>
-            <div id="historygraph" class="span4"></div>
-            <div id="historytable" class="span3 offset6"></div>            
+	           </button>
+                <br />
+                <div id="historydiv" class="span4 offset4"></div>
+                <div id="historygraph" class="span4"></div>
+                <div id="historytable" class="span3 offset6"></div>            
+            </div>
         </div>
     </div>
 	  <!--
