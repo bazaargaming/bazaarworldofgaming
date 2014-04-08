@@ -6,6 +6,14 @@ require 'restclient'
 
 module GameSearchHelper
 
+  def self.genre_list
+    [["Select one...",nil],
+     ["Action","action"],["Adventure","adventure"],["Educational","Educational"],["Family","Family"],["Fighting","Fighting"],
+     ["Horror","horror"],["Indie","Indie"],["Mac","Mac"],["MMORPG","MMO"],["Music","Music"],["Platform","Platform"],
+     ["Puzzle","Puzzle"],["Racing","racing"],["Role-Playing","Role-Playing"],["Sandbox","sandbox"],["Shooter","shooter"],
+     ["Simulation","simulation"],["Sports","sports"],["Stealth","stealth"],["Strategy","strategy"]]
+  end
+
   def self.genre_map
    [["shooter"],["action"],["adventure"],["sandbox"],["racing"],["horror"],["MMO", "MMOs"],["Role-Playing","RPGs"],
     ["strategy"],["sports"],["stealth"],
@@ -391,10 +399,9 @@ module GameSearchHelper
     puts genre_list
   end
 
+  def self.get_genres
+    return GameSearchHelper.genre_list
+  end
 
-
-
-
-  
 
 end
