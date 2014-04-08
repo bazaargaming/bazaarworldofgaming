@@ -1,16 +1,19 @@
-<div class = "container">
-      <div class = "container-fluid" id="top-cont">
-        <h1 class = "header"><%=@game.title %> <% if @best!=nil %>- <%= number_to_currency(@best.saleamt) %><%end%></h1>
+<div class = "container-fluid">
+    <div class = "container-fluid" id="top-cont">
+        <h1 class = "header offset2"><%=@game.title %> <% if @best!=nil %>- <%= number_to_currency(@best.saleamt) %><%end%></h1>
         <div class = "row">
-        	<div class = "well" id="top">
-        		<img style = "height:auto; width:auto; max-width:300px; max-height:300px" src='<%= @game.image_url %>' class = "img-rounded"> <br />
+            <table class = "table-bordered offset2"><tr>    
+        	<td class="span2 well">
+                <div id="top">
+        		  <img style = "height:auto; width:auto; max-width:300px; max-height:300px" src='<%= @game.image_url %>' class = "img-rounded"> <br />
                 <% if signed_in? %>
                     <div id = "addgame">
                         <%= button_to "Add Game to Profile", {action: "add", gameid: @currentID}, form_class: "top" %>
                     </div> 
                 <% end %>    
-        	</div>
-        	<div class = "well" id ="info">
+        	   </div>
+            </td><td class="span2 well">
+        	<div id ="info">
         		<!--:genres,  -->
         		<p> Genre:
                     <% if @game.genres.empty? %>
@@ -36,28 +39,30 @@
         		<p>Coop: <%= @game.coop %></p>
 
         	</div>
-        	<div class = "well" id = "sales">
+            </td><td class="span2 well">
+        	<div id = "sales">
                 <% if @game.game_sales.empty? %>
                     <%= "No sales data for this game."%>
                 <% else %>    
-                    <table>
+                    <div class="table container">
                     <% @game.game_sales.each do |sale| %>
-                      <tr id=<%=sale.store.downcase%>>
-                            <td>
+                      <div class="row" id=<%=sale.store.downcase%> >
+                            <span class="span1">
                                 <a href= "<%=sale.url%>">
                                     <%= image_tag("#{sale.store.downcase}.jpg",{size: "59x35"})%>
                                 </a>
-                            </td> 
-                            <td><span class = "price"><%= number_to_currency(sale.saleamt) %></span></td>
-                        </tr>
+                            </span> 
+                            <span class = "span1 price"><%= number_to_currency(sale.saleamt) %></span>
+                        </div>
+                        <br />
                     <% end %>
-                    </table>
+                    </div>
                 <%end%>    
         	</div>
-        	
+        	</td></tr></table>
         </div>
-      </div>
-      <div class = "well">
+        <div class="row">
+            <div class = "well span8 offset2">
 
             <% if (@game.description != nil and @game.description.include?("Requires the base game")) %>
                 <p>This product is DLC.</p>
@@ -65,18 +70,18 @@
             <%else%>
         	  <p><%= @game.description %></p>
             <%end%>
-        </div>
-     
-	    <button class="btn btn-default history" id="/json?id=<%=@game.id%>" >
-	    	Price History
-	    </button>
-        <div class="container-fluid">
-            <div class="row-fluid">
-                <div id="historydiv"></div>
-                <div id="historygraph" class="span4"></div>
-                <div id="historytable" class="span3 offset6"></div>            
             </div>
         </div>
+        <div class="row well span9" id="history">
+	       <button class="btn btn-default history offset2" id="/json?id=<%=@game.id%>" >
+	    	  Price History
+	       </button>
+            <br />
+            <div id="historydiv" class="span6 offset3"></div>
+            <div id="historygraph" class="span4"></div>
+            <div id="historytable" class="span3 offset6"></div>            
+        </div>
+    </div>
 	  <!--
 	  	<div class = "container">
 		    <div class = "row">
@@ -100,4 +105,4 @@
 		    </div>
 		</div>-->
 	  
-	</div>
+</div>
