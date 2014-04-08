@@ -14,6 +14,10 @@ module GameSearchHelper
      ["Simulation","simulation"],["Sports","sports"],["Stealth","stealth"],["Strategy","strategy"]]
   end
 
+  def self.page_options
+    [["10",10],["15",15],["20", 20],["25",25]]
+  end
+
   def self.genre_map
    [["shooter"],["action"],["adventure"],["sandbox"],["racing"],["horror"],["MMO", "MMOs"],["Role-Playing","RPGs"],
     ["strategy"],["sports"],["stealth"],
@@ -34,6 +38,7 @@ module GameSearchHelper
   def self.character_exceptions
     ["I","X","V"]
   end
+
   def self.find_game(title)
     if(title == "")
       return []
@@ -359,7 +364,7 @@ module GameSearchHelper
   end
 
 
-  def self.find_games_by_genre(genre)
+  def self.filter_games_by_genre(genre)
     puts genre
     games_found = Game.where("genres LIKE ?", "%" + genre + "%")
     GameSearchHelper.genre_map.each do |overlap_genres|
@@ -379,7 +384,6 @@ module GameSearchHelper
     games_found.each do |game|
       puts game.search_title
     end
-
 
   end
 
@@ -403,5 +407,8 @@ module GameSearchHelper
     return GameSearchHelper.genre_list
   end
 
+  def self.get_page_options
+    return GameSearchHelper.page_options
+  end
 
 end

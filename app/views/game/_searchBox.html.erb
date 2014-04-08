@@ -1,6 +1,6 @@
 <%= form_tag("/game/search", method: "get") do %>
 	<%= text_field_tag(:stuff, params[:stuff]) %>
-	<%= button_tag("Search", name: "type", value: "name") %>
+	<%= button_tag("Search", name: "type", value: "search") %>
 	<div>
 		<div class = "Input">
 			<div class "form-inline">
@@ -22,8 +22,11 @@
           <!--<%= button_tag("Sports", name: "genre", value: "Sports") %> -->
           <p>Genres:</p>
           <div style="width:20%">
-            <%= @options = options_for_select(GameSearchHelper.get_genres, params[:genre]) %>
-            <%= select_tag(:genre, @options) %>
+            <%= @options = options_for_select(GameSearchHelper.get_genres, nil) %>
+            <%= select_tag(:genre, @options) %><br>
+            <%= @options = options_for_select(GameSearchHelper.get_page_options) %>
+            Items Per Page <%= select_tag(:per, @options) %>
+            <%= button_tag("Browse", name: "type", value: "browse") %>
           </div>
         </div>
 <% end %>
