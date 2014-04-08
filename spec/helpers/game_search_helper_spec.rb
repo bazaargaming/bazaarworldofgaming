@@ -316,4 +316,93 @@ describe GameSearchHelper do
 
  	end
 
+	describe "Filter by genre" do
+
+		it "should pick the correct games" do
+			shooter = Game.create(title: "test", search_title: "test", genres: ["shooter"])
+			action1 = Game.create(title: "test1", search_title: "test1", genres: ["action"])
+			action2 = Game.create(title: "test2", search_title: "test2", genres: ["action"])
+			family = Game.create(title: "test3", search_title: "test3", genres: ["family"])
+			result = GameSearchHelper.filter_by_genre("shooter", Game.all)
+			expect(result.include? (shooter)).to be_true
+			result = GameSearchHelper.filter_by_genre("action", Game.all)
+			expect(result.include? (action1)).to be_true
+			expect(result.include? (action2)).to be_true
+			result = GameSearchHelper.filter_by_genre("family", Game.all)
+			expect(result.include? (family)).to be_true
+
+		end
+
+		it "should be able to find a game by searching for all of its genres" do
+			magic_game = Game.create(title: "test", search_title: "test", genres: ["shooter", "Mac", "Role-Playing", "Action"])
+			result = GameSearchHelper.filter_by_genre("shooter", Game.all)
+			expect(result.include? (magic_game)).to be_true
+			result = GameSearchHelper.filter_by_genre("Mac", Game.all)
+			expect(result.include? (magic_game)).to be_true
+			result = GameSearchHelper.filter_by_genre("Role-Playing", Game.all)
+			expect(result.include? (magic_game)).to be_true
+			result = GameSearchHelper.filter_by_genre("Action", Game.all)
+			expect(result.include? (magic_game)).to be_true
+			result = GameSearchHelper.filter_by_genre("sports", Game.all)
+			expect(result.include? (magic_game)).to be_false
+
+		end
+
+		it "should be case insensitive" do
+			magic_game = Game.create(title: "test", search_title: "test", genres: ["shooter", "Mac", "Role-Playing", "Action"])
+			result = GameSearchHelper.filter_by_genre("SHOOTER", Game.all)
+			expect(result.include? (magic_game)).to be_true
+			
+			result = GameSearchHelper.filter_by_genre("mac", Game.all)
+			expect(result.include? (magic_game)).to be_true
+
+
+
+		end
+	end
+
+	describe "Find games by genre" do
+
+		it "should return same list for MMO and MMOs" do
+			mmo = Game.create(title: "test", search_title: "test", genres: ["MMO"])
+			result1 = GameSearchHelper.find_games_by_genre("MMO", Game.all)
+			result2 = GameSearchHelper.find_games_by_genre("MMOs", Game.all)
+			expect(result1.include? (mmo)).to be_true
+			expect(result2.include? (mmo)).to be_true
+			expect(result2.size).to eq(result1.size)
+		end
+
+		it "should return same list for all simulation genres" do
+			simulation = Game.create(title: "test", search_title: "test", genres: ["Simulation"])
+			result1 = GameSearchHelper.find_games_by_genre("simulation", Game.all)
+			result2 = GameSearchHelper.find_games_by_genre("Life Simulation", Game.all)
+			result3 = GameSearchHelper.find_games_by_genre("Flight Simulation", Game.all)
+			result4 = GameSearchHelper.find_games_by_genre("Vehicle Simulation", Game.all)
+			expect(result1.include? (simulation)).to be_true
+			expect(result2.include? (simulation)).to be_true
+			expect(result3.include? (simulation)).to be_true
+			expect(result4.include? (simulation)).to be_true
+
+
+		end
+	end
+
+	describe "Roman Numeral Handler" do
+		it "should change roman to arabic" do
+			roman = "Civilization V"
+			arabic = "Civilization 5"
+			modified = GameSearchHelper.handle_roman_numeral(roman)
+			expect(arabic).to eq(modified)
+
+		end
+
+		it "should change arabic to roman" do
+			roman = "Halo II"
+			arabic = "Halo 2"
+			modified = GameSearchHelper.handle_roman_numeral(arabic)
+			expect(roman).to eq(modified)
+
+		end
+	end
+
 end
