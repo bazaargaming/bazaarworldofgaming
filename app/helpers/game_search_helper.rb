@@ -358,15 +358,24 @@ module GameSearchHelper
     return false
   end
 
+  def self.filter_by_genre(genre, game_list)
+    results = []
+    game_list.each do |game|
+      if game.genres.map(&:downcase).include? (genre.downcase)
+        results.push(game)
+      end
+    end
+    return results
+  end
 
-  def self.find_games_by_genre(genre)
+  def self.find_games_by_genre(genre, game_list)
     puts genre
-    games_found = Game.where("genres LIKE ?", "%" + genre + "%")
+    games_found = GameSearchHelper.filter_by_genre(genre, game_list)
     GameSearchHelper.genre_map.each do |overlap_genres|
       if overlap_genres.include?(genre)
         overlap_genres.each do |alternative_genre|
           if alternative_genre != genre
-            alternative_list = Game.where("genres LIKE ?", "%" + alternative_genre + "%")
+            alternative_list = GameSearchHelper.filter_by_genre(alternative_genre, game_list)
             games_found = games_found | alternative_list
           end
         end
