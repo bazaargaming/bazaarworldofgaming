@@ -13,13 +13,7 @@
 			);
             $("#historydiv").show();
            // $(window).scrollTop($("#history").offset().top + $("#history").height );
-        	$.getJSON(link, function(data){
-                $("#historydiv").hide();
-                $("#historytable").show();
-                $("#historygraph").show();
-
-
-                
+        	$.getJSON(link, function(data){           
                 var steamarr = data.filter(function(item){
                     return (item.store === "Steam");
                 });
@@ -32,7 +26,7 @@
                 var unique = {};
                 var distinctDates = new Array();
                 
-                htmlstr = "<br /><table class=\"table table-bordered table-striped\"><tr><td>Occurred</td><td>Store</td><td>price</td></tr>";
+                htmlstr = "<table class=\"table table-bordered table-striped\"><tr><td>Occurred</td><td>Store</td><td>price</td></tr>";
         		//$.each(data,function(index,item){
                 for(var i = 0; i < data.length; i++){
                     var item = data[i];
@@ -51,7 +45,7 @@
 
         		}
                 distinctDates.reverse();
-                var graphhtml = "<table><caption> Price Hisotry</caption><thead><tr><td></td>";
+                var graphhtml = "<table><caption> Price History</caption><thead><tr><td></td>";
                 for(var i = 0; i < distinctDates.length; i++){
 
                     graphhtml += "<th>"+ distinctDates[i] + "</th>";
@@ -194,7 +188,10 @@
                 $("#historygraph").html(graphhtml);
 
                 $('#historygraph').visualize({type: "line"});
-                $("#historygraph").hide();
+                $("#historygraph").hide()
+                $(".visualize").attr("class","visualize visualize-line span6").trigger('visualizeRefresh');
+                $("#historydiv").hide();
+                $("#historytable").show();
                 console.log(graphhtml);
                 
                 //var plot = $.jqplot('historygraph', [[3,7,9,1,4,6,8,2,5]]);
