@@ -18,6 +18,8 @@ gem 'turbolinks'
 gem 'protected_attributes'
 gem 'execjs'
 gem 'therubyracer'
+gem 'jquery_visualize'
+gem 'jqplot-rails'
 group :development, :test do
   gem 'sqlite3', '1.3.8'
   gem 'rspec-rails', '2.13.1'
