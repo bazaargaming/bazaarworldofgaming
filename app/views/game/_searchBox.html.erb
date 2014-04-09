@@ -1,12 +1,12 @@
 <%= form_tag("/game/search", method: "get") do %>
 	<%= text_field_tag(:stuff, params[:stuff]) %>
-	<%= button_tag("Search", name: "type", value: "name") %>
+	<%= submit_tag("Search") %>
 	<div>
 		<div class = "Input">
 			<div class "form-inline">
 				sort by: 
 				<%= radio_button_tag(:method, '0') %>
-				relavance
+				relevance
 				<%= radio_button_tag(:method, '1') %>
 				rating: high to low
 				<%= radio_button_tag(:method, '2') %>
@@ -18,8 +18,14 @@
 			</div>
 		</div>
 	</div>
-        <div>
-          <%= button_tag("Sports", name: "genre", value: "Sports") %>
-
+        <div class = "Input">
+          <!--<%= button_tag("Sports", name: "genre", value: "Sports") %> -->
+          
+          <div style="width:25%">
+            Genres:
+            <%= select_tag(:genre, options_for_select(GameSearchHelper.get_genres, params[:genre])) %><br>
+            Items Per Page:
+            <%= select_tag(:per, options_for_select(GameSearchHelper.get_page_options, params[:per])) %>
+          </div>
         </div>
 <% end %>

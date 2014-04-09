@@ -6,6 +6,18 @@ require 'restclient'
 
 module GameSearchHelper
 
+  def self.genre_list
+    [["Select one...",nil],
+     ["Action","action"],["Adventure","adventure"],["Educational","Educational"],["Family","Family"],["Fighting","Fighting"],
+     ["Horror","horror"],["Indie","Indie"],["Mac","Mac"],["MMORPG","MMO"],["Music","Music"],["Platform","Platform"],
+     ["Puzzle","Puzzle"],["Racing","racing"],["Role-Playing","Role-Playing"],["Sandbox","sandbox"],["Shooter","shooter"],
+     ["Simulation","simulation"],["Sports","sports"],["Stealth","stealth"],["Strategy","strategy"]]
+  end
+
+  def self.page_options
+    [["10",10],["15",15],["20", 20],["25",25]]
+  end
+
   def self.genre_map
    [["shooter"],["action"],["adventure"],["sandbox"],["racing"],["horror"],["MMO", "MMOs"],["Role-Playing","RPGs"],
     ["strategy"],["sports"],["stealth"],
@@ -15,7 +27,7 @@ module GameSearchHelper
 
   end
   def self.potential_messed_up_words
-    [["super heroes", "superheroes"],["civilization", "sid meiers civilization"], ["standard edition", ""], ["40k", "40000"], ["2","ii"], ["goty", "game of the year"], ["goty", "game of the year edition"], ["digital edition", ""] ]
+    [["super heroes", "superheroes"],["civilization", "sid meiers civilization"], ["standard edition", ""], ["40k", "40000"], ["2","ii"], ["goty", "game of the year"], ["goty", "game of the year edition"]]
   end
 
   def self.roman_numerals
@@ -26,6 +38,7 @@ module GameSearchHelper
   def self.character_exceptions
     ["I","X","V"]
   end
+
   def self.find_game(title)
     if(title == "")
       return []
@@ -350,28 +363,40 @@ module GameSearchHelper
     return false
   end
 
+  def self.filter_by_genre(genre, game_list)
+    results = []
+    game_list.each do |game|
+      if game.genres.map(&:downcase).include? (genre.downcase)
+        results.push(game)
+      end
+    end
+    return results
+  end
 
-  def self.find_games_by_genre(genre)
+  def self.find_games_by_genre(genre, game_list, method)
     puts genre
-    games_found = Game.where("genres LIKE ?", "%" + genre + "%")
+    if game_list.empty?
+      game_list = Game.all
+    end
+    games_found = GameSearchHelper.filter_by_genre(genre, game_list)
     GameSearchHelper.genre_map.each do |overlap_genres|
       if overlap_genres.include?(genre)
         overlap_genres.each do |alternative_genre|
           if alternative_genre != genre
-            alternative_list = Game.where("genres LIKE ?", "%" + alternative_genre + "%")
+            alternative_list = GameSearchHelper.filter_by_genre(alternative_genre, game_list)
             games_found = games_found | alternative_list
           end
         end
       end
-
-
+      if method == '0'
+        games_found.sort!{|x,y| x.search_title <=> y.search_title}
+      end
     end
   
     puts "games found:"
     games_found.each do |game|
       puts game.search_title
     end
-
 
   end
 
@@ -391,10 +416,12 @@ module GameSearchHelper
     puts genre_list
   end
 
+  def self.get_genres
+    return GameSearchHelper.genre_list
+  end
 
-
-
-
-  
+  def self.get_page_options
+    return GameSearchHelper.page_options
+  end
 
 end
