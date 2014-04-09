@@ -128,10 +128,7 @@ describe GmgHelper do
 		expect(result[:store]).to eq("GMG")
 		expect(result[:origamt]).to eq(9.99)
 		expect(result[:saleamt]).to eq(9.99)
-	end
-
-
-        
+	end        
 
 end
 

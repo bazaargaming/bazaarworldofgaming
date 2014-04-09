@@ -27,7 +27,7 @@ require 'restclient'
 
 
 
-#  GameSale.delete_all
+ # GameSale.delete_all
 
 
 
@@ -53,7 +53,7 @@ require 'restclient'
 
 
 
-# # #BEGIN RUNNING STEAM
+#BEGIN RUNNING STEAM
 # i = 1
 
 # until i == 300
@@ -87,7 +87,7 @@ require 'restclient'
 # 	i = i + 1;
 # end
 
-# #END RUNNING STEAM
+#END RUNNING STEAM
 
 
 # GameSale.where(:store => "Amazon").delete_all
@@ -109,35 +109,35 @@ require 'restclient'
 
 
 
-	# i = 1
-	# while result != nil
-	# 	result = Nokogiri::HTML(result)
+	i = 1
+	while result != nil
+		result = Nokogiri::HTML(result)
 
-	# 	File.open("db/test_files/product_url" + i.to_s  + ".html", 'w') { |file| file.write(result.to_s) }
+		File.open("db/test_files/product_url" + i.to_s  + ".html", 'w') { |file| file.write(result.to_s) }
 
-	# 	AmazonHelper.parse_products_off_result_page(result)
+		AmazonHelper.parse_products_off_result_page(result)
 
-	# 	next_url_chunk = result.css(".pagnNext").to_s
-	# 	next_url_start = next_url_chunk.index('<a href="')
-	# 	next_url_end = next_url_chunk.index('" class')
-	# 	next_url = next_url_chunk[next_url_start+9...next_url_end]
+		next_url_chunk = result.css(".pagnNext").to_s
+		next_url_start = next_url_chunk.index('<a href="')
+		next_url_end = next_url_chunk.index('" class')
+		next_url = next_url_chunk[next_url_start+9...next_url_end]
 
-	# 	next_url_chunks = next_url.split("&amp;")
+		next_url_chunks = next_url.split("&amp;")
 
-	# 	next_url = "";
+		next_url = "";
 
-	# 	next_url_chunks.each do |url_chunk|
-	# 		next_url = next_url + "&" + url_chunk
-	# 	end
+		next_url_chunks.each do |url_chunk|
+			next_url = next_url + "&" + url_chunk
+		end
 
-	# 	next_url = next_url[1...next_url.length]
+		next_url = next_url[1...next_url.length]
 
-	# 	puts next_url
-	# 	puts "\n"
-	# 	result = RestClient.get(next_url)
+		puts next_url
+		puts "\n"
+		result = RestClient.get(next_url)
 
-	# 	i = i+1
-	# end
+		i = i+1
+	end
 
 
 
