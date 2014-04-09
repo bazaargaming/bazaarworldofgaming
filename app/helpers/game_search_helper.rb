@@ -27,7 +27,7 @@ module GameSearchHelper
 
   end
   def self.potential_messed_up_words
-    [["super heroes", "superheroes"],["civilization", "sid meiers civilization"], ["standard edition", ""], ["40k", "40000"], ["2","ii"], ["goty", "game of the year"], ["goty", "game of the year edition"], ["digital edition", ""] ]
+    [["super heroes", "superheroes"],["civilization", "sid meiers civilization"], ["standard edition", ""], ["40k", "40000"], ["2","ii"], ["goty", "game of the year"], ["goty", "game of the year edition"]]
   end
 
   def self.roman_numerals
@@ -391,7 +391,6 @@ module GameSearchHelper
       if method == '0'
         games_found.sort!{|x,y| x.search_title <=> y.search_title}
       end
-      return games_found
     end
   
     puts "games found:"

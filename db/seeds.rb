@@ -27,7 +27,7 @@ require 'restclient'
 
 
 
-#  GameSale.delete_all
+ # GameSale.delete_all
 
 
 
@@ -40,20 +40,20 @@ require 'restclient'
 # # # end
 
 
-# # #BEGIN RUNNING GMG
+#BEGIN RUNNING GMG
 
-# GmgHelper.parseGmgSite
+GmgHelper.parseGmgSite
 
-# # #END RUNNING GMG
-
-
+#END RUNNING GMG
 
 
 
 
 
 
-# # #BEGIN RUNNING STEAM
+
+
+#BEGIN RUNNING STEAM
 # i = 1
 
 # until i == 300
@@ -87,25 +87,26 @@ require 'restclient'
 # 	i = i + 1;
 # end
 
-# #END RUNNING STEAM
+#END RUNNING STEAM
 
 
-# GameSale.where(:store => "Amazon").delete_all
+
+#GameSale.where(:store => "Amazon").delete_all
 
 
 # #BEGIN RUNNING AMAZON
 	
 
 	
-	AmazonHelper.parse_first_sale_page
+	# AmazonHelper.parse_first_sale_page
 
-	AMAZON_STORE_BASE_URL = 'http://www.amazon.com/s?ie=UTF8&page=2&rh=n%3A2445220011'
+	# AMAZON_STORE_BASE_URL = 'http://www.amazon.com/s?ie=UTF8&page=2&rh=n%3A2445220011'
 
-	AmazonHelper.parse_first_sale_page
+	# AmazonHelper.parse_first_sale_page
 
-	next_url = AMAZON_STORE_BASE_URL
+	# next_url = AMAZON_STORE_BASE_URL
 
-	result = RestClient.get(next_url)
+	# result = RestClient.get(next_url)
 
 
 
@@ -142,8 +143,6 @@ require 'restclient'
 
 
 #END RUNNING AMAZON
-
-
 
 
 

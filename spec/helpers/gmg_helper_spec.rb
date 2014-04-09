@@ -1,6 +1,76 @@
 require 'spec_helper'
+require 'nokogiri'
+require 'open-uri'
 
 describe GmgHelper do
+	#test different individual parsers
+	it "should accurately parse title data for 'Titanfall'" do
+		# Titan Fall on gmg
+		url = "http://www.greenmangaming.com/s/us/en/pc/games/shooter/titanfall-na/"
+		sale_page = Nokogiri::HTML(open(url))
+		title = GmgHelper.getTitle(sale_page)
+		game_title = "Titanfall "
+		expect(title).to eq(game_title)
+	end
+
+	it "should accurately parse description for 'Titanfall'" do
+		# Titan Fall on gmg
+		url = "http://www.greenmangaming.com/s/us/en/pc/games/shooter/titanfall-na/"
+		sale_page = Nokogiri::HTML(open(url))
+		description = GmgHelper.getDescription(sale_page)
+		game_description = "Also Available:</strong>\n<a href=\"http://www.greenmangaming.com/s/us/en/pc/games/shooter/titanfall-season-pass-na/\"><img src=\"https://d1uxrvegqjaw98.cloudfront.net/medialibrary/2014/03/TitanfallSeasonPass-Available_product-page-image.jpg\" alt=\"level1\" title=\"Titanf\nE3 2013 Awards\nRECORD SETTING 6 GAME CRITIC AWARD WINS!\nPrepare for Titanfall. Crafted by one of the co-creators of Call of Duty and other key developers behind the Call of Duty franchise, Titanfall is an all-new universe juxtaposing small vs. giant, natural vs. industrial and man vs. machine. The visionaries at Respawn have drawn inspiration from their proven experiences in first-person action and with Titanfall are focused on bringing something exciting the next generation of multiplayer gaming. \nKEY FEATURES\nFast-Paced Future Warfare –  In Titanfall the advanced warfare of tomorrow gives you the freedom to fight your way as both elite assault Pilot and agile, heavily armored 24’ tall Titans. Titanfall rethinks fundamental combat and movement giving players the ability to change tactics on the fly, attacking or escaping depending on the situation. \nThe Future of Online Multiplayer Action  –  The game is entirely multiplayer, in a new experience that combines fast-paced online action with the heroic set piece moments traditionally found in campaign mode. The intersection of the two is a big part of what gives Titanfall its iconic identity.\nThe Visionaries that Defined Gaming for a Generation are back! — Founded in 2010, Respawn Entertainment was formed by Vince Zampella and Jason West, former co-founders of Infinity Ward and two of the co-creators of the multi-billion dollar franchise Call of Duty™ They are building on their pedigree and taking a new approach to game design and creating an all new universe with Titanfall\n"
+		expect(description).to eq(game_description)
+
+	end
+
+	it "should accurately parse release date data for 'Titanfall'" do
+		# Titan Fall on gmg
+		url = "http://www.greenmangaming.com/s/us/en/pc/games/shooter/titanfall-na/"
+		sale_page = Nokogiri::HTML(open(url))
+		release_date = GmgHelper.getReleaseDate(sale_page)
+		game_release_date = "March 11, 2014"
+		expect(release_date).to eq(game_release_date)
+	end
+
+	it "should accurately parse boxart data for 'Titanfall'" do
+		# Titan Fall on gmg
+		url = "http://www.greenmangaming.com/s/us/en/pc/games/shooter/titanfall-na/"
+		sale_page = Nokogiri::HTML(open(url))
+		box_art = GmgHelper.getBoxArt(sale_page)
+		game_box_art = "http://wizzywizzyweb.gmgcdn.com/media/products/titanfall/boxart/thumbnail-titanfall_boxart_wide-280x158.jpeg"
+		expect(box_art).to eq(game_box_art)
+	end
+
+	it "should accurately parse genre data for 'Titanfall'" do
+		# Titan Fall on gmg
+		url = "http://www.greenmangaming.com/s/us/en/pc/games/shooter/titanfall-na/"
+		sale_page = Nokogiri::HTML(open(url))
+		genres = GmgHelper.getGenres(sale_page)
+		game_genres = ["Shooter", "Action"]
+		expect(genres).to eq(game_genres)
+	end
+
+	it "should accurately parse publisher and developer data for 'Titanfall'" do
+		# Titan Fall on gmg
+		url = "http://www.greenmangaming.com/s/us/en/pc/games/shooter/titanfall-na/"
+		sale_page = Nokogiri::HTML(open(url))
+		publisher = GmgHelper.getPublisher(sale_page)
+		game_publisher = "Electronic Arts"
+		expect(publisher).to eq(game_publisher)
+
+		developer = GmgHelper.getDeveloper(sale_page)
+		game_developer = "Respawn Entertainment"
+		expect(developer).to eq(game_developer)
+	end
+
+	it "should accurately parse price data for 'Titanfall'" do
+		# Titan Fall on gmg
+		url = "http://www.greenmangaming.com/s/us/en/pc/games/shooter/titanfall-na/"
+		sale_page = Nokogiri::HTML(open(url))
+		prices = GmgHelper.getPrices(sale_page)
+		game_prices = ["$59.99", "$59.99"]
+		expect(prices).to eq(game_prices)
+	end
 
 	it "should update databases with sales info for 'Titanfall'" do
 		# Titan Fall on gmg
@@ -58,10 +128,7 @@ describe GmgHelper do
 		expect(result[:store]).to eq("GMG")
 		expect(result[:origamt]).to eq(9.99)
 		expect(result[:saleamt]).to eq(9.99)
-	end
-
-
-        
+	end        
 
 end
 

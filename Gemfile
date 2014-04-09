@@ -19,7 +19,7 @@ gem 'protected_attributes'
 gem 'execjs'
 gem 'therubyracer'
 gem 'jquery_visualize'
-gem 'jqplot-rails'
+
 group :development, :test do
   gem 'sqlite3', '1.3.8'
   gem 'rspec-rails', '2.13.1'
@@ -39,8 +39,8 @@ end
 group :test do
   gem 'capybara', '2.1.0'
   gem 'factory_girl_rails', '4.1.0'
-  gem 'cucumber-rails', '1.2.1', :require => false
-  gem 'database_cleaner', '0.7.0'
+  gem 'cucumber-rails', '1.4.0', :require => false
+  gem 'database_cleaner', github: 'bmabey/database_cleaner'
   # gem 'launchy', '2.1.0'
   # gem 'rb-fsevent', '0.9.1', :require => false
   # gem 'growl', '1.0.3'

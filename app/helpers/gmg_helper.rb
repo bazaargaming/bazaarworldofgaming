@@ -258,7 +258,7 @@ module GmgHelper
 
     current_page = 1;
 
-    while current_page < num_pages
+    while current_page < num_pages+1
       request_url = root_url + "/?page=" + current_page.to_s
       current_page = current_page + 1
       puts request_url
