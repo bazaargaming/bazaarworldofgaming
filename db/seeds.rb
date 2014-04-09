@@ -40,11 +40,11 @@ require 'restclient'
 # # # end
 
 
-# # #BEGIN RUNNING GMG
+#BEGIN RUNNING GMG
 
-# GmgHelper.parseGmgSite
+GmgHelper.parseGmgSite
 
-# # #END RUNNING GMG
+#END RUNNING GMG
 
 
 
@@ -90,60 +90,59 @@ require 'restclient'
 #END RUNNING STEAM
 
 
-# GameSale.where(:store => "Amazon").delete_all
+
+#GameSale.where(:store => "Amazon").delete_all
 
 
 # #BEGIN RUNNING AMAZON
 	
 
 	
-	AmazonHelper.parse_first_sale_page
+	# AmazonHelper.parse_first_sale_page
 
-	AMAZON_STORE_BASE_URL = 'http://www.amazon.com/s?ie=UTF8&page=2&rh=n%3A2445220011'
+	# AMAZON_STORE_BASE_URL = 'http://www.amazon.com/s?ie=UTF8&page=2&rh=n%3A2445220011'
 
-	AmazonHelper.parse_first_sale_page
+	# AmazonHelper.parse_first_sale_page
 
-	next_url = AMAZON_STORE_BASE_URL
+	# next_url = AMAZON_STORE_BASE_URL
 
-	result = RestClient.get(next_url)
+	# result = RestClient.get(next_url)
 
 
 
-	i = 1
-	while result != nil
-		result = Nokogiri::HTML(result)
+	# i = 1
+	# while result != nil
+	# 	result = Nokogiri::HTML(result)
 
-		File.open("db/test_files/product_url" + i.to_s  + ".html", 'w') { |file| file.write(result.to_s) }
+	# 	File.open("db/test_files/product_url" + i.to_s  + ".html", 'w') { |file| file.write(result.to_s) }
 
-		AmazonHelper.parse_products_off_result_page(result)
+	# 	AmazonHelper.parse_products_off_result_page(result)
 
-		next_url_chunk = result.css(".pagnNext").to_s
-		next_url_start = next_url_chunk.index('<a href="')
-		next_url_end = next_url_chunk.index('" class')
-		next_url = next_url_chunk[next_url_start+9...next_url_end]
+	# 	next_url_chunk = result.css(".pagnNext").to_s
+	# 	next_url_start = next_url_chunk.index('<a href="')
+	# 	next_url_end = next_url_chunk.index('" class')
+	# 	next_url = next_url_chunk[next_url_start+9...next_url_end]
 
-		next_url_chunks = next_url.split("&amp;")
+	# 	next_url_chunks = next_url.split("&amp;")
 
-		next_url = "";
+	# 	next_url = "";
 
-		next_url_chunks.each do |url_chunk|
-			next_url = next_url + "&" + url_chunk
-		end
+	# 	next_url_chunks.each do |url_chunk|
+	# 		next_url = next_url + "&" + url_chunk
+	# 	end
 
-		next_url = next_url[1...next_url.length]
+	# 	next_url = next_url[1...next_url.length]
 
-		puts next_url
-		puts "\n"
-		result = RestClient.get(next_url)
+	# 	puts next_url
+	# 	puts "\n"
+	# 	result = RestClient.get(next_url)
 
-		i = i+1
-	end
+	# 	i = i+1
+	# end
 
 
 
 #END RUNNING AMAZON
-
-
 
 
 
