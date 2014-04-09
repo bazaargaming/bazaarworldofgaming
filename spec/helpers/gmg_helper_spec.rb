@@ -4,7 +4,7 @@ require 'open-uri'
 
 describe GmgHelper do
 	#test different individual parsers
-	it "should accurated parse title data for 'Titanfall'" do
+	it "should accurately parse title data for 'Titanfall'" do
 		# Titan Fall on gmg
 		url = "http://www.greenmangaming.com/s/us/en/pc/games/shooter/titanfall-na/"
 		sale_page = Nokogiri::HTML(open(url))
@@ -13,7 +13,7 @@ describe GmgHelper do
 		expect(title).to eq(game_title)
 	end
 
-	it "should accurated parse description for 'Titanfall'" do
+	it "should accurately parse description for 'Titanfall'" do
 		# Titan Fall on gmg
 		url = "http://www.greenmangaming.com/s/us/en/pc/games/shooter/titanfall-na/"
 		sale_page = Nokogiri::HTML(open(url))
@@ -23,7 +23,7 @@ describe GmgHelper do
 
 	end
 
-	it "should accurated parse release date data for 'Titanfall'" do
+	it "should accurately parse release date data for 'Titanfall'" do
 		# Titan Fall on gmg
 		url = "http://www.greenmangaming.com/s/us/en/pc/games/shooter/titanfall-na/"
 		sale_page = Nokogiri::HTML(open(url))
@@ -32,7 +32,7 @@ describe GmgHelper do
 		expect(release_date).to eq(game_release_date)
 	end
 
-	it "should accurated parse boxart data for 'Titanfall'" do
+	it "should accurately parse boxart data for 'Titanfall'" do
 		# Titan Fall on gmg
 		url = "http://www.greenmangaming.com/s/us/en/pc/games/shooter/titanfall-na/"
 		sale_page = Nokogiri::HTML(open(url))
@@ -41,7 +41,7 @@ describe GmgHelper do
 		expect(box_art).to eq(game_box_art)
 	end
 
-	it "should accurated parse genre data for 'Titanfall'" do
+	it "should accurately parse genre data for 'Titanfall'" do
 		# Titan Fall on gmg
 		url = "http://www.greenmangaming.com/s/us/en/pc/games/shooter/titanfall-na/"
 		sale_page = Nokogiri::HTML(open(url))
@@ -50,7 +50,7 @@ describe GmgHelper do
 		expect(genres).to eq(game_genres)
 	end
 
-	it "should accurated parse publisher and developer data for 'Titanfall'" do
+	it "should accurately parse publisher and developer data for 'Titanfall'" do
 		# Titan Fall on gmg
 		url = "http://www.greenmangaming.com/s/us/en/pc/games/shooter/titanfall-na/"
 		sale_page = Nokogiri::HTML(open(url))
@@ -63,7 +63,7 @@ describe GmgHelper do
 		expect(developer).to eq(game_developer)
 	end
 
-	it "should accurated parse price data for 'Titanfall'" do
+	it "should accurately parse price data for 'Titanfall'" do
 		# Titan Fall on gmg
 		url = "http://www.greenmangaming.com/s/us/en/pc/games/shooter/titanfall-na/"
 		sale_page = Nokogiri::HTML(open(url))
