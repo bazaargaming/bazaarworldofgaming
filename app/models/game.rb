@@ -62,6 +62,20 @@ class Game < ActiveRecord::Base
  	end
 
 
+ 	gamersgate_sales = game_sales.where(["store = ?", "GamersGate"])
+ 	min_gamersgate_sale = nil
+
+ 	gamersgate_sales.each do |sale|
+ 		saleamt = sale.saleamt.to_f
+
+
+ 		if min_gamersgate_sale == nil or min_gamersgate_sale.saleamt.to_f > saleamt.to_f
+ 			min_gamersgate_sale = sale
+ 		end
+
+ 	end
+
+
  	if min_steam_sale != nil
  		results.push(min_steam_sale)
  	end
@@ -72,6 +86,10 @@ class Game < ActiveRecord::Base
 
  	if min_gmg_sale != nil
  		results.push(min_gmg_sale)
+ 	end
+
+ 	if min_gamersgate_sale != nil
+ 		results.push(min_gamersgate_sale)
  	end
 
  	return results
