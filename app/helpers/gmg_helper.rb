@@ -12,9 +12,7 @@ module GmgHelper
     game_title = /.*<h1 class="prod_det">(.*)<\/h1>.*/.match(game_title.to_s)
     game_title = game_title[1]
     game_title = game_title.gsub('(NA)', '')
-
   end
-
 
   def self.getDescription(sale_page)
     description_paragraphs = sale_page.css("section.description p")
