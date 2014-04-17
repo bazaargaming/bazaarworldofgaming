@@ -39,9 +39,8 @@ Bazaarworldofgaming::Application.configure do
     :authentication => :plain,
     :domain => 'Bazaar World of Gaming',
     :user_name => 'bazaarworldofgaming@gmail.com',
-    :password => ''
+    :password => 'bazaargaming'
 }
-
 
 
 

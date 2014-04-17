@@ -11,7 +11,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140317223003) do
+ActiveRecord::Schema.define(version: 20140417223606) do
+
+  create_table "alerts", force: true do |t|
+    t.float    "threshold"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "user_id"
+    t.integer  "game_id"
+  end
 
   create_table "game_sale_histories", force: true do |t|
     t.datetime "occurred"
@@ -56,7 +64,6 @@ ActiveRecord::Schema.define(version: 20140317223003) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "search_title"
-    t.integer  "user_id"
   end
 
   create_table "users", force: true do |t|
