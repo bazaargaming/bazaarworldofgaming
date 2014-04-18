@@ -1,18 +1,16 @@
 // Place all the behaviors and hooks related to the matching controller here.
 // All this logic will automatically be available in application.js.
-    $(document).ready(function(){
+    var red = function(){
         $("#historydiv").hide();
         $("#historytable").hide();
         $("#historygraph").hide();
     	$(".history").click(function(){
             $(".history").hide();
-            $("#history").prepend("<h3 class=\"header3\">Price History</h3>")
+            $("#history").prepend("<h3 class=\"header3\">Price History</h3>");
         	var link = $(this).attr('id');
         	$("#historydiv").html(
-        		"<img src=\"http://jimpunk.net/Loading/wp-content/uploads/loading1.gif\"/>"
-			);
-            $("#historydiv").show();
-           // $(window).scrollTop($("#history").offset().top + $("#history").height );
+        		"<img src=\"http://jimpunk.net/Loading/wp-content/uploads/loading1.gif\"/>");
+             $("#historydiv").show();
         	$.getJSON(link, function(data){           
                 var steamarr = data.filter(function(item){
                     return (item.store === "Steam");
@@ -26,8 +24,8 @@
                 var unique = {};
                 var distinctDates = new Array();
                 
-                htmlstr = "<table class=\"table table-bordered table-striped\"><tr><td>Occurred</td><td>Store</td><td>price</td></tr>";
-        		//$.each(data,function(index,item){
+                htmlstr = "<table class=\"table table-bordered table-striped header-fixed\"><thead><tr><th>Occurred</th><th>Store</th><th>Price</th></tr></thead><tbody>";
+                
                 for(var i = 0; i < data.length; i++){
                     var item = data[i];
                     var previous;
@@ -44,6 +42,7 @@
                     
 
         		}
+                htmlstr += "</tbody></table>";
                 distinctDates.reverse();
                 var graphhtml = "<table><caption> Price History</caption><thead><tr><td></td>";
                 for(var i = 0; i < distinctDates.length; i++){
@@ -181,22 +180,21 @@
                     cheapestPrice = -1;
                 });
                 graphhtml += "</tr></tbody></table>";
-
+                
                
                 $("#historydiv").html("");
         		$("#historytable").html(htmlstr);
                 $("#historygraph").html(graphhtml);
-
                 $('#historygraph').visualize({type: "line"});
-                $("#historygraph").hide()
+                $("#historytable").height(100);
+                $("#historygraph").hide();
                 $(".visualize").attr("class","visualize visualize-line span6").trigger('visualizeRefresh');
                 $("#historydiv").hide();
                 $("#historytable").show();
                 console.log(graphhtml);
-                
-                //var plot = $.jqplot('historygraph', [[3,7,9,1,4,6,8,2,5]]);
-                
         	});
 
     	});
-    });		
+   };
+    $(document).ready(red);
+    $(document).on('page:load',red);
