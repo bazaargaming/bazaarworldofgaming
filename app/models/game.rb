@@ -7,6 +7,8 @@ class Game < ActiveRecord::Base
 
   has_many :game_sales, dependent: :destroy
   has_many :game_sale_histories, dependent: :destroy
+  has_many :alerts, dependent: :destroy
+
 
 
 
