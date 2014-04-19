@@ -11,13 +11,23 @@ module GamersGateHelper
 	end
 
 
-	def self.parse_price(row)
+	def self.parse_current_price(row)
 		price = row.css('span.prtag').text
 		return price.delete("$").to_f		
 	end
 
 	def self.parse_game_url(row)
 		return row.css('a[class = ttl]')[0]['href']
+	end
+
+	def self.is_on_sale(row)
+		return row.css('span.redbg')[0] != nil
+	end
+
+	def self.parse_orig_price(doc)
+		price_tag = doc.css('div.price_list').css('span.prtag')
+		return price_tag.text.delete("$").to_f
+
 	end
 
 	def self.parse_menu_page(url)
@@ -29,11 +39,15 @@ module GamersGateHelper
 		end
 		games.each do |game|
 			title = parse_name(game)
-			price = parse_price(game)
+			current_price = parse_current_price(game)
 			game_url = parse_game_url(game)
 			puts title
-			puts price
-			puts game_url
+			game_src = RestClient.get(game_url)
+			game_doc = Nokogiri::HTML(game_src)
+			if is_on_sale(game)
+				orig_price = parse_orig_price(game_doc)
+				puts orig_price
+			end
 		end
 
 		return true
