@@ -27,12 +27,17 @@ module GameSearchHelper
 
   end
   def self.potential_messed_up_words
-    [["super heroes", "superheroes"],["civilization", "sid meiers civilization"], ["standard edition", ""], ["40k", "40000"], ["2","ii"], ["goty", "game of the year"], ["goty", "game of the year edition"]]
+    [["super heroes", "superheroes"],["civilization", "sid meiers civilization"], ["standard edition", ""], ["40k", "40000"], ["2","ii"], ["goty", "game of the year"], ["goty", "game of the year edition"], ["bundle", "collection"],["rise of caesar", "the rise of caesar"],
+["master thief edition", "thief master thief edition"]]
   end
 
   def self.roman_numerals
     [["1","I"],["2","II"],["3","III"],["4","IV"],["5","V"],["6","VI"],["7","VII"],["8","VIII"],["9","IX"],["10","X"],
      ["11","XI"],["12","XII"],["13","XIII"],["14","XIV"],["15","XV"],["16","XVI"],["17","XVII"],["18","XVIII"],["19","XIX"],["20","XX"]]
+  end
+
+  def self.number_words
+    [["1","one"],["2","two"],["3","three"],["4","four"],["5","five"],["6","six"],["7","seven"],["8","eight"],["9","nine"],["10","ten"]]
   end
   
   def self.character_exceptions
@@ -111,6 +116,23 @@ module GameSearchHelper
   end
 
 
+  def self.handle_numbers(title)
+
+    new_words_list = title.scan /[[:alnum:]]+/
+    number_words.each do |words|
+      if new_words_list.index(words[0]) != nil
+        index = new_words_list.index(words[0])
+        new_words_list[index] = words[1]
+      elsif new_words_list.index(words[1]) != nil
+        index = new_words_list.index(words[1])
+        new_words_list[index] = words[0]
+      end
+    end
+    return new_words_list.join(' ')
+
+
+
+  end
 
   def self.get_game_lis_partial_match(words_list)
     counts = Hash.new(0)
@@ -168,6 +190,14 @@ module GameSearchHelper
         return games_in_db.first
       end
 
+      #numbers & words
+      title_number = handle_numbers(search_title)
+      games_in_db = Game.where("search_title =?", title_number)
+      if games_in_db.length != 0
+        puts "Match Found!: " + title_number
+        return games_in_db.first
+      end
+
       GameSearchHelper.resolve_name_miss_of_vendor_title(search_title)
 
 
@@ -215,12 +245,23 @@ module GameSearchHelper
     #try adding the word edition, sometimes it gets missed
     search_title = search_title_original + " edition"
     games_in_db = Game.where("search_title =?", search_title)
-
+   
+	
     if games_in_db.length != 0
       puts "Match found on mismatch!: " + search_title
       return games_in_db.first
     end
 
+    
+    #try adding 'the' at the start
+    search_title = "the " + search_title_original
+    games_in_db = Game.where("search_title =?", search_title)
+   
+	
+    if games_in_db.length != 0
+      puts "Match found on mismatch!: " + search_title
+      return games_in_db.first
+    end
 
     #here we'll try words that may be messed up, NOTE FOR EACH WORD DIFFERENTIAL WE CHECK HERE, NEED TO ADD 
     #A SIMILAR CHECK TO are_games_same. IF TIME PERMITS, LOOK INTO REFACTORING THIS COUPLED CHANGE. 
@@ -250,7 +291,7 @@ module GameSearchHelper
 
     search_title = search_title_original
 
-    if(search_title.include? "edition" or search_title.include? "game of the year" or  search_title.include? "gold" or search_title.include? "package" or search_title.include? "deluxe" or search_title.include? "collection")
+    if(search_title.include? "edition" or search_title.include? "game of the year" or  search_title.include? "gold" or search_title.include? "package" or search_title.include? "deluxe" or search_title.include? "collection" or search_title.include? "mac")
 
       until search_title.length == 0
         search_title = search_title.split(' ')[0...-1].join(' ')

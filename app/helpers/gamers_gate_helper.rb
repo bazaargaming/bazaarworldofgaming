@@ -5,7 +5,10 @@ require 'restclient'
 
 
 module GamersGateHelper
+	
 
+
+	
 	def self.parse_name(row)
 		return row.css('a[class = ttl]')[0]["title"]
 	end
@@ -30,24 +33,45 @@ module GamersGateHelper
 
 	end
 
-	def self.parse_menu_page(url)
+	def self.parse_description(doc)
+		return doc.css('meta[name = description]')[0]['content']
+
+	end
+
+	def self.parse_menu_page(url, file)
 		f = RestClient.get(url)
 		doc = Nokogiri::HTML(f)
 		games = doc.css('div.product_display')
 		if games[0] == nil
 			return false
 		end
+
 		games.each do |game|
 			title = parse_name(game)
 			current_price = parse_current_price(game)
 			game_url = parse_game_url(game)
 			puts title
-			game_src = RestClient.get(game_url)
-			game_doc = Nokogiri::HTML(game_src)
+			#game_src = RestClient.get(game_url)
+			#game_doc = Nokogiri::HTML(game_src)
 			if is_on_sale(game)
-				orig_price = parse_orig_price(game_doc)
-				puts orig_price
+				#orig_price = parse_orig_price(game_doc)
+				#puts orig_price
+			else
+				orig_price = current_price
 			end
+			#description = parse_description(game_doc)
+			game = GameSearchHelper.find_right_game(title, '')
+   			search_title = StringHelper.create_search_title(title)
+			if game == nil
+				puts 'new game!'
+
+				file.write(search_title + '\n')
+
+				
+			else
+				puts game.search_title
+			end
+
 		end
 
 		return true
@@ -56,16 +80,17 @@ module GamersGateHelper
 	end
 
 	def self.parse_all_games
-
+		file = File.open('mismatches.txt', 'w')
 		page_number = 1
 		parsing = true
 		gamers_gate_page_base = "http://www.gamersgate.com/games?state=available&pg="
 		while parsing do
 			url = gamers_gate_page_base + page_number.to_s
 			puts "start parsing page" + page_number.to_s
-			parsing = parse_menu_page(url)
+			parsing = parse_menu_page(url, file)
 			page_number = page_number + 1
 		end
+		file.close
 	end
 
 
