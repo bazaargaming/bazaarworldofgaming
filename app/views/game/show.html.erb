@@ -62,6 +62,7 @@
         	</td></tr></table>
         </div>
         <div class="row">
+            <table><tr><td>
             <div class = "well span8 offset2">
 
             <% if (@game.description != nil and @game.description.include?("Requires the base game")) %>
@@ -71,6 +72,17 @@
         	  <p><%= @game.description %></p>
             <%end%>
             </div>
+            </td>
+            <% if current_user != nil %>
+            <td>
+            <div class="span1">
+            <!-- Button to trigger modal -->
+            <a href="#alertModal" role="button" class="btn btn-primary" data-toggle="modal">Set Alert</a>
+            </div>
+            </td>
+            <% end %>
+            </tr>
+            </table>
         </div>
         
 
@@ -81,31 +93,36 @@
 	           </button>
                 <div id="historydiv" class="span3 offset3"></div>
                 <div id="historygraph" class="span6"></div>
-                <div id="historytable" class="span3"></div>
+                <div id="historytable" class="span3 scrollable"></div>
             </div>
         </div>
     </div>
-	  <!--
-	  	<div class = "container">
-		    <div class = "row">
-		    	<div class = "well" id="top">
-	        		<p>Steam:</p>
-	        		<p><a href="https://store.steampowered.com/<%= yield(:steam_link) %>"><%= yield(:steam) %></a></p>
 
-	        	</div
-	        	<div class = "well" id ="top">
-	        		<p>GoG:</p>
-	        		<p><a href="https:www.gog.com/<%= yield(:gog_link) %>"><%= yield(:gog) %></a></p>
-	        	</div>
-	        	<div class = "well" id = "top">
-	        		<p>Green Man Gaming:</p>
-	        		<p><a href="https://www.greenmangaming.com/<%= yield(:gmg_link) %>"><%= yield(:gmg) %></a></p>
-	        	</div>
-	        	<div class = "well" id = "top">
-	        		<p>Amazon:</p>
-	        		<p><a href="https://www.amazon.com/<%= yield(:amazon_link) %>"><%= yield(:amazon) %></a></p>
-	        	</div>
-		    </div>
-		</div>-->
-	  
+     
+    <!-- Modal -->
+    <div id="alertModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="alertModalLabel" aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3 id="alertModalLabel">Set Alert</h3>
+        </div>
+        <div class="modal-body">
+            <% if current_user != nil %>
+                <% @alert = Alert.new %>
+                <%= form_for (@alert) do |f| %>
+                   <span class="label">Threshold</span>: <%= f.text_field (:threshold) %><br />
+                   <%= hidden_field(:game, :id)%>
+                   <%= hidden_field(:user, :id)%>
+                   <%= f.submit "Set Alert",class: "btn btn-primary"%>
+                <% end %>
+            <% else %>
+                <p> you must be logged in to create an alert </p>
+            <% end %>
+        </div>
+        <div class="modal-footer">
+            <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+        </div>
+    </div>
+
+
+
 </div>

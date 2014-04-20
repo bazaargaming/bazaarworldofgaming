@@ -11,7 +11,7 @@ Bazaarworldofgaming::Application.routes.draw do
   post "game/add"
   resources :json, only: [:index]
   resources :game 
-
+  resources :alerts, only: [:create]
   match '/signup',  to: 'users#new',            via: 'get'
   match '/signin',  to: 'sessions#new',         via: 'get'
   match '/signout', to: 'sessions#destroy',     via: 'delete'

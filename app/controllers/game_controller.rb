@@ -32,8 +32,9 @@ class GameController < ApplicationController
 
 
   def show
-  	@game = Game.find(params[:id])
-  	@currentID = params[:id]
+    @currentID = params[:id]
+  	@game = Game.find(@currentID)
+    @user = current_user
     @best = GameHelper.best_price(@game)
 
   end
