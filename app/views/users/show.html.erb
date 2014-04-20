@@ -1,35 +1,44 @@
-<h1> Welcome, <%= current_user.name %> </h1>
-<h3> Here are a list of your selected games </h3>
-<% current_user.games.each do |game| %>
-	<div class="SearchResult row">
-			<div class="span1 boxArt">
-				<img src="<%= game.image_url%>"> </img>
+<div class="profile_container">
+    <div class="user_info">
+     	<div class = "container">
+			<div class="row">
+	  			<div class="span3">
+	    			<div class="thumbnail">
+	      				<img src="<%= gravatar_for(current_user) %>" alt="..." height="100%" width="100%"/>	    
+	    			</div>
+	  			</div>
+	  			<div class="span6">
+	    			<div class = "user_name">
+	      				<b><%= current_user.username %></b>
+	    			</div>
+	    			<div class="row">
+	      				<div class="user_name_tags span2">
+	        				<b>Games Owned:</b><%= current_user.games.size %>
+	      				</div>
+	      				<div class="user_name_tags span3">
+	        				<b>Email: </b><%= current_user.email %>
+	      				</div>
+	    			</div>
+	  			</div>
 			</div>
+    	</div>
+    </div>
 
-			<div class = "span8 display">
-				<div class = "row">
-					<div class = "span7 gameTitle">
-						<h4>
-							<%= link_to game.title, :controller => "game", :action => "show", :id => game.id %>
-						</h4>
-					</div>
-					<div class = "pull-right releaseDate">
-						<span class="label label-default"><%= game.release_date%></span>
-					</div>
-				</div>
-				<div class = "description" id = "dot1">
-					<%= game.description%>
-				</div>
-				<div class = "labels">
-				<div class="pull-right">
-					<% game.genres.each do |genre| %>
-						<span class="label label-info"><%= genre %></span>
-        				<% end %>
-				</div>         
-				</div>
 
-			</div>
-	</div>
-<% end %>
+    <div class="container">
+    	<div class="row">
+    		<% current_user.games.each do |game| %>
 
-		
+        		<div class="game-thumb-cont span2">
+	   				<a href="<%= game_path(game) %>" class="game-thumbnail thumbnail">
+            			<img src="<%= game.image_url %>" alt="..." />
+	    				<div class = "thumbnail_title">
+            				<%= game.title %>
+            			</div>
+           			</a>
+        		</div>
+        	<% end %>
+        </div>
+    </div>
+</div>
+
