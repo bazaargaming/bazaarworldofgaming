@@ -291,7 +291,7 @@ module GameSearchHelper
 
     search_title = search_title_original
 
-    if(search_title.include? "edition" or search_title.include? "game of the year" or  search_title.include? "gold" or search_title.include? "package" or search_title.include? "deluxe" or search_title.include? "collection" or search_title.include? "mac")
+    if(search_title.include? "edition" or search_title.include? "game of the year" or  search_title.include? "gold" or search_title.include? "package" or search_title.include? "deluxe" or search_title.include? "collection")
 
       until search_title.length == 0
         search_title = search_title.split(' ')[0...-1].join(' ')
