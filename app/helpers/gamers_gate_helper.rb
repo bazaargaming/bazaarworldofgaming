@@ -33,10 +33,33 @@ module GamersGateHelper
 
 	end
 
+
+
 	def self.parse_description(doc)
 		return doc.css('meta[name = description]')[0]['content']
-
 	end
+
+
+
+  	def self.storeSalesData(original_price, sale_price, game, sale_link)
+  		
+    		gmg_sales = game.game_sales.where(["store = ?", "GamersGate"])
+
+    		if gmg_sales == nil or gmg_sales.length == 0
+
+          		game_sale = game.game_sales.create!(store: "GamersGate", 
+                                             		    url: sale_link, 
+                                                	    origamt: original_price, 
+                                              		    saleamt: sale_price,
+                                                            occurrence: DateTime.now)
+
+
+          		game_sale_history = game.game_sale_histories.create!(store: "GamersGate",
+                                                               		     price: sale_price,
+                                                               		     occurred: DateTime.now)
+    		end
+  	end
+
 
 	def self.parse_menu_page(url)
 		f = RestClient.get(url)
@@ -51,18 +74,19 @@ module GamersGateHelper
 			current_price = parse_current_price(game)
 			game_url = parse_game_url(game)
 			puts title
-			#game_src = RestClient.get(game_url)
-			#game_doc = Nokogiri::HTML(game_src)
+
 			if is_on_sale(game)
-				#orig_price = parse_orig_price(game_doc)
-				#puts orig_price
+				game_src = RestClient.get(game_url)
+				game_doc = Nokogiri::HTML(game_src)
+				orig_price = parse_orig_price(game_doc)
+
 			else
 				orig_price = current_price
 			end
 			#description = parse_description(game_doc)
 			game = GameSearchHelper.find_right_game(title, 'asdfjaweofijawpofij')
    			search_title = StringHelper.create_search_title(title)
-
+			
 			if game == nil
 				puts 'new game!'
 
@@ -70,7 +94,8 @@ module GamersGateHelper
 
 				
 			else
-				
+				storeSalesData(orig_price, current_price, game, game_url)
+				puts "Sales data created for  " + title
 			end
 
 		end
