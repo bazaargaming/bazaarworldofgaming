@@ -113,7 +113,8 @@ module GamersGateHelper
 			current_price = parse_current_price(game)
 			game_url = parse_game_url(game)
 			puts title
-
+			game_src = nil
+			game_doc = nil
 			if is_on_sale(game)
 				game_src = RestClient.get(game_url)
 				game_doc = Nokogiri::HTML(game_src)
@@ -122,20 +123,32 @@ module GamersGateHelper
 			else
 				orig_price = current_price
 			end
-			#description = parse_description(game_doc)
-			game = GameSearchHelper.find_right_game(title, 'asdfjaweofijawpofij')
+
+			game = GameSearchHelper.find_right_game(title, nil)
    			search_title = StringHelper.create_search_title(title)
 			
 			if game == nil
-				
-
-
-
-				
+				if game_src == nil
+					game_src = RestClient.get(game_url)
+					game_doc = Nokogiri::HTML(game_src)
+				end
+				publisher = parse_publisher(game_doc)
+				genres = parse_genres(game_doc)
+				developer = parse_developer(game_doc)
+				description = parse_description(game_doc)
+				boxart = parse_boxart(game_doc)
+				mcurl = GamesdbHelper.build_metacritic_url(title)
+				metacritic_rating = GamesdbHelper.retrieve_metacritic_score(mcurl)
+				puts "Making new game: " + title
+				game = Game.create!(title: title,  description: description,  publisher: publisher, 
+						    developer: developer, genres: genres, metacritic_rating: metacritic_rating,
+           					    image_url: boxart, search_title: search_title)
 			else
-				storeSalesData(orig_price, current_price, game, game_url)
-				puts "Sales data created for  " + title
+				
 			end
+
+			storeSalesData(orig_price, current_price, game, game_url)
+			puts "Sales data created for  " + title
 
 		end
 
