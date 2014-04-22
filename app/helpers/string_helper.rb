@@ -9,12 +9,14 @@ module StringHelper
   def self.sanitize_title(title)
       escape_for_space_characters = Regexp.escape('\\+-&|!(){}[]^~*?:&–')     
       escape_for_nothing_characters = Regexp.escape('\',®™.’,')
-      str = title.gsub(/([#{escape_for_space_characters}])/, ' ')
+      str = title.gsub('&', 'and')
+      str = str.gsub('amp;', 'and')
+      str = str.gsub(/([#{escape_for_space_characters}])/, ' ')
       str = str.gsub(/([#{escape_for_nothing_characters}])/, '')
       str = str.gsub('dlc', '')
 
-      str = str.gsub('amp;', 'and')
-      str = str.gsub('&', 'and')
+
+
   end
 
   def self.create_search_title(title)
