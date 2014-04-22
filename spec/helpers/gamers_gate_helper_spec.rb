@@ -17,7 +17,7 @@ describe GamersGateHelper do
 		f = RestClient.get(url)
 		doc = Nokogiri::HTML(f)
 		games = doc.css('div.product_display')
-		game = games[0]
+		game = games[2]
 		expect(GamersGateHelper.parse_name(game)).to eq("The Last Federation")
 		expect(GamersGateHelper.parse_current_price(game)).to eq(14.99)
 		
@@ -35,7 +35,7 @@ describe GamersGateHelper do
 		f = RestClient.get(url)
 		doc = Nokogiri::HTML(f)
 		games = doc.css('div.product_display')
-		game = games[1]
+		game = games[3]
 		expect(GamersGateHelper.parse_name(game)).to eq("Wargame: Red Dragon")
 		expect(GamersGateHelper.parse_current_price(game)).to eq(39.99)
 		expect(GamersGateHelper.parse_game_url(game)).to eq("http://www.gamersgate.com/DD-WGRD/wargame-red-dragon")
@@ -47,11 +47,11 @@ describe GamersGateHelper do
 		f = RestClient.get(url)
 		doc = Nokogiri::HTML(f)
 		games = doc.css('div.product_display')
-		game = games[0]
+		game = games[2]
 		expect(GamersGateHelper.parse_name(game)).to eq("Port Royale 2")
-		expect(GamersGateHelper.parse_current_price(game)).to eq(9.99)
+		expect(GamersGateHelper.parse_current_price(game)).to eq(5.0)
 		expect(GamersGateHelper.parse_game_url(game)).to eq("http://www.gamersgate.com/DD-PR2/port-royale-2")
-		expect(GamersGateHelper.is_on_sale(game)).to eq(false)
+		expect(GamersGateHelper.is_on_sale(game)).to eq(true)
 	end
 
 end
