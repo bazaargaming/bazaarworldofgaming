@@ -39,6 +39,39 @@ module GamersGateHelper
 		return doc.css('meta[name = description]')[0]['content']
 	end
 
+	def self.parse_genres(doc)
+		genres_list = []
+		genres_row = doc.search"[text()*='Categories:']"
+		if (genres_row.first == nil)
+			return nil
+		end
+		genres_tags = genres_row.first.parent.css('a')
+		genres_tags.each do |tag|
+			genres_list.push(tag.text)
+		end
+		return genres_list
+		
+	end
+
+	def self.parse_developer(doc)
+		developer_row = doc.search"[text()*='Developer:']"
+		if (developer_row.first == nil)
+			return nil
+		end
+		developer_tag = developer_row.first.parent.css('a')
+		return developer_tag.first.text
+		
+	end
+
+	def self.parse_publisher(doc)
+		publisher_row = doc.search"[text()*='Publisher:']"
+		if (publisher_row.first == nil)
+			return nil
+		end
+		publisher_tag = publisher_row.first.parent.css('a')
+		return publisher_tag.first.text
+		
+	end
 
 
   	def self.storeSalesData(original_price, sale_price, game, sale_link)
@@ -60,6 +93,12 @@ module GamersGateHelper
     		end
   	end
 
+	def self.parse_boxart(doc)
+		return doc.css('meta[itemprop = image]')[0]['content']
+	
+	end
+
+	
 
 	def self.parse_menu_page(url)
 		f = RestClient.get(url)
@@ -88,7 +127,7 @@ module GamersGateHelper
    			search_title = StringHelper.create_search_title(title)
 			
 			if game == nil
-				puts 'new game!'
+				
 
 
 
