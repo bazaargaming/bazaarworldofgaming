@@ -58,6 +58,8 @@ Game.delete_all
 
 				score = GamesdbHelper.retrieve_metacritic_score(metacritic_url)
 
+				gameinfo[:metacritic_rating] = score
+
 				puts score
 
 			  gameinfo[:search_title] = StringHelper.create_search_title(gameinfo[:title])
