@@ -3,6 +3,6 @@ class Alert < ActiveRecord::Base
 	belongs_to :user
   	belongs_to :game
 
-  	validates :threshold,  presence: true
+  	validates :threshold,  presence: true, numericality: true
 
 end

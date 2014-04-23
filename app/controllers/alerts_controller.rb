@@ -1,11 +1,11 @@
 class AlertsController < ApplicationController
 	def create	
-		@alert =Game.find(params[:game][:id]).alerts.create({:threshold => params[:alert][:threshold],
+		@alert =Game.find(params[:game][:id]).alerts.new({:threshold => params[:alert][:threshold],
 							:user_id => params[:user][:id]})
-		if @alert 
+		if @alert.save
 			flash[:success] = "Alert was successfully created!"
 		else
-			flash[:error] = "Alert was unable to be created!"
+			flash[:error] = "Alert was unable to be created"
 		end
 
 		redirect_to :back
@@ -14,10 +14,13 @@ class AlertsController < ApplicationController
 
 	def update
 		@alert = Alert.find(params[:id])
-
 		if(@alert.update_attributes(params[:alert]))
-			redirect_to :back
+			flash[:success] = "Alert was successfully updated!"
+		else
+			flash[:error] = "Alert could not be updated"
 		end
+			redirect_to :back
+		
 
 	end
 	def destroy

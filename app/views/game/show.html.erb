@@ -113,7 +113,7 @@
                 <% @alert = Alert.new %>
                 <%= form_for (@alert) do |f| %>
                    <%= f.label (:threshold) %>
-                   <%= f.number_field (:threshold), class: "form-control", value: @lowest.price%><br />
+                   $<%= f.number_field (:threshold), class: "form-control", value: @lowest.price%><br />
                    <%= hidden_field(:game, :id)%>
                    <%= hidden_field(:user, :id)%>
                    <%= f.submit "Set Alert",class: "btn btn-primary"%>
@@ -138,7 +138,7 @@
                                 <%if @alert %>
                                     <%= form_for(@alert)  do |alrt| %>
                                         <%= alrt.label :threshold %>
-                                        <%= alrt.number_field :threshold, class: "form-control"  %>
+                                        $<%= alrt.number_field :threshold, class: "form-control"  %>
                                         <%= alrt.submit "Change Threshold", class: "btn btn-primary " %>
                                     <% end %>
                                 <%else%>
