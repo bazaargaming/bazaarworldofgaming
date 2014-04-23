@@ -13,14 +13,7 @@ module AlertHelper
 			user = alert.user
 			game = alert.game
 
-			lowest_sale = nil
-			game_sales = game.game_sales
-			game_sales.each do |sale|
-				saleamt = sale.saleamt.to_f
-				if lowest_sale == nil or lowest_sale.saleamt.to_f > saleamt.to_f
-					lowest_sale = sale
-				end
-			end
+			lowest_sale = GameHelper.best_price(game)
 
 
 			if lowest_sale != nil

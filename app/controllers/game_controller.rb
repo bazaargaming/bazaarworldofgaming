@@ -36,7 +36,8 @@ class GameController < ApplicationController
   	@game = Game.find(@currentID)
     @user = current_user
     @best = GameHelper.best_price(@game)
-
+    @alert = (@user.alerts & @game.alerts)[0]
+    @lowest = @game.game_sale_histories.order(price: :asc).first
   end
 
   def add

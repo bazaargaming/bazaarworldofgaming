@@ -1,6 +1,13 @@
 class AlertsController < ApplicationController
-	def create
-		flash[:success] = "Alert was successfully created!"
+	def create	
+		@alert =Game.find(params[:game][:id]).alerts.create({:threshold => params[:alert][:threshold],
+							:user_id => params[:user][:id]})
+		if @alert 
+			flash[:success] = "Alert was successfully created!"
+		else
+			flash[:error] = "Alert was unable to be created!"
+		end
+
 		redirect_to :back
 	end
 	

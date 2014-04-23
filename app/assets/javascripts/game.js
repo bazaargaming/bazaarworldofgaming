@@ -186,7 +186,7 @@
         		$("#historytable").html(htmlstr);
                 $("#historygraph").html(graphhtml);
                 $('#historygraph').visualize({type: "line"});
-                $("#historytable").height(100);
+                $("#historytable").height(Math.min($('#historytable').height(),$('.visualize').height()));
                 $("#historygraph").hide();
                 $(".visualize").attr("class","visualize visualize-line span6").trigger('visualizeRefresh');
                 $("#historydiv").hide();

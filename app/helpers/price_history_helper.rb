@@ -10,9 +10,9 @@ module PriceHistoryHelper
 			if cur !=nil
 				if cur.price > h.price
 					cleaninghash[h.store][h.occurred.to_date]=h
-					histories.delete(cur)
+					histories.reject{|n|  n == cur}
 				else
-					histories.delete(h)
+					histories.reject{|n|  n == h}
 				end
 			else
 				cleaninghash[h.store][h.occurred.to_date]=h
