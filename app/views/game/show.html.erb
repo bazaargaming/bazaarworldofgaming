@@ -76,8 +76,12 @@
             <% if current_user != nil %>
             <td>
             <div class="span1">
+            <% if @alert == nil%>
             <!-- Button to trigger modal -->
             <a href="#alertModal" role="button" class="btn btn-primary" data-toggle="modal">Set Alert</a>
+            <%else%>
+            <a href="#editModal" role="button" class="btn btn-primary" data-toggle="modal">Edit Alert</a>
+            <%end%>
             </div>
             </td>
             <% end %>
@@ -86,14 +90,13 @@
         </div>
         
 
-        <div class="row">
             <div class="offset2" id="history">
 	           <button class="btn btn-default history" id="/json?id=<%=@game.id%>">
 	    	  Price History
 	           </button>
                 <div id="historydiv" class="span3 offset3"></div>
                 <div id="historygraph" class="span6"></div>
-                <div id="historytable" class="span3 scrollable"></div>
+                <div id="historytable" class="span3 scrollable" style="overflow-y: auto; overflow-x: hidden;height: 400px"></div>
             </div>
         </div>
     </div>
@@ -106,10 +109,11 @@
             <h3 id="alertModalLabel">Set Alert</h3>
         </div>
         <div class="modal-body">
-            <% if current_user != nil %>
+            <% if current_user != nil && @alert == nil%>
                 <% @alert = Alert.new %>
                 <%= form_for (@alert) do |f| %>
-                   <span class="label">Threshold</span>: <%= f.text_field (:threshold) %><br />
+                   <%= f.label (:threshold) %>
+                   <%= f.number_field (:threshold), class: "form-control", value: @lowest.price%><br />
                    <%= hidden_field(:game, :id)%>
                    <%= hidden_field(:user, :id)%>
                    <%= f.submit "Set Alert",class: "btn btn-primary"%>
@@ -123,6 +127,30 @@
         </div>
     </div>
 
+    <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                     <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                <h4 class="modal-title" id="myModalLabel">Edit Threshold</h4>
+                             </div>
+                            <div class="modal-body">
+                                <%if @alert %>
+                                    <%= form_for(@alert)  do |alrt| %>
+                                        <%= alrt.label :threshold %>
+                                        <%= alrt.number_field :threshold, class: "form-control"  %>
+                                        <%= alrt.submit "Change Threshold", class: "btn btn-primary " %>
+                                    <% end %>
+                                <%else%>
+                                    <p>There is no alert to edit</p>
+                                <%end%>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
 
 </div>
