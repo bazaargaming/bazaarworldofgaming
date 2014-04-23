@@ -25,24 +25,64 @@ require 'restclient'
 # # TODO: First wipe out the sales database, then run steam, then run gmg, then run amazon
 
 
+Game.delete_all
 
 
- # GameSale.delete_all
+	VIABLE_CONSOLE_LIST = ["PC"]
+
+
+	@client = Gamesdb::Client.new
+ 	platforms = @client.platforms.all
+
+
+	platforms.each do |platform| unless !(VIABLE_CONSOLE_LIST.include?(platform.name))
+		puts(platform.name)
+		puts("in it")
+		platform_games_wrapper = @client.get_platform_games(platform.id)
+		platform_games = platform_games_wrapper["Game"]
+		if (!(platform_games.nil?) && platform.id != "4914")
+			platform_games.each do |platform_game|
+				gameinfo = GamesdbHelper.fetch_game_info(platform_game["id"],@client)
+				if GamesdbHelper.game_exists_in_db?(gameinfo[:title],gameinfo[:platform])
+					next
+				end
+
+				
+        		metacritic_url = GamesdbHelper.build_metacritic_url(gameinfo[:title], gameinfo[:platform])
+				if metacritic_url.nil?
+					next
+				end
+
+
+			  puts(metacritic_url)
+
+				score = GamesdbHelper.retrieve_metacritic_score(metacritic_url)
+
+				puts score
+
+			  gameinfo[:search_title] = StringHelper.create_search_title(gameinfo[:title])
+
+				g = Game.create!(gameinfo)
+			
+				puts(g.title)
+
+			end
+		end
+	end
+end
 
 
 
-# # # i = 3286
 
 
-# # # until i == 6957
-# # # 	Game.delete(i)
-# # # 	i = i + 1
-# # # end
+GameSale.delete_all
+
+
 
 
 #BEGIN RUNNING GMG
 
-# GmgHelper.parseGmgSite
+GmgHelper.parseGmgSite
 
 #END RUNNING GMG
 
@@ -54,96 +94,90 @@ require 'restclient'
 
 
 #BEGIN RUNNING STEAM
-# i = 1
+i = 1
 
-# until i == 300
-# 	APP_BASE_URL = 'http://steamdb.info/apps/page' + i.to_s + '/'
+until i == 300
+	APP_BASE_URL = 'http://steamdb.info/apps/page' + i.to_s + '/'
 
-# 	STEAM_STORE_BASE_URL = 'http://store.steampowered.com/app/'
+	STEAM_STORE_BASE_URL = 'http://store.steampowered.com/app/'
 
-# 	result = Nokogiri::HTML(open(APP_BASE_URL))
+	result = Nokogiri::HTML(open(APP_BASE_URL))
 
-# 	rows = result.css("table#table-apps")
+	rows = result.css("table#table-apps")
 
-# 	rows = rows.css("tbody")
-# 	rows = rows.css("tr")
+	rows = rows.css("tbody")
+	rows = rows.css("tr")
 
-# 	rows.each do |row|
-# 		row_info = row.css("td")
+	rows.each do |row|
+		row_info = row.css("td")
 
-# 		row_info_2 = row_info[2].to_s
+		row_info_2 = row_info[2].to_s
 
-# 		if row_info[1].to_s.include? "Game" or row_info[1].to_s.include? "DLC"
-# 			row_info_app_string = row_info[0].to_s
-# 			start_index = row_info_app_string.index('">')
-# 			end_index = row_info_app_string.index('</a>')
-# 			store_id = row_info_app_string[start_index+2...end_index]
+		if row_info[1].to_s.include? "Game" or row_info[1].to_s.include? "DLC"
+			row_info_app_string = row_info[0].to_s
+			start_index = row_info_app_string.index('">')
+			end_index = row_info_app_string.index('</a>')
+			store_id = row_info_app_string[start_index+2...end_index]
 
-# 			url = STEAM_STORE_BASE_URL + store_id
-# 			SteamHelper.extract_page_info(url)
+			url = STEAM_STORE_BASE_URL + store_id
+			SteamHelper.extract_page_info(url)
 
-# 		end
-# 	end
-# 	i = i + 1;
-# end
+		end
+	end
+	i = i + 1;
+end
 
-#END RUNNING STEAM
+END RUNNING STEAM
 
-
-
-# GameSale.where(:store => "Amazon").delete_all
 
 
 # #BEGIN RUNNING AMAZON
-	# AmazonHelper.parse_first_sale_page
+	AmazonHelper.parse_first_sale_page
 
-	# AMAZON_STORE_BASE_URL = 'http://www.amazon.com/s?ie=UTF8&page=2&rh=n%3A2445220011'
+	AMAZON_STORE_BASE_URL = 'http://www.amazon.com/s?ie=UTF8&page=2&rh=n%3A2445220011'
 
-	# AmazonHelper.parse_first_sale_page
+	AmazonHelper.parse_first_sale_page
 
-	# next_url = AMAZON_STORE_BASE_URL
+	next_url = AMAZON_STORE_BASE_URL
 
-	# result = RestClient.get(next_url)
+	result = RestClient.get(next_url)
 
 
 
-	# i = 1
-	# while result != nil
-	# 	result = Nokogiri::HTML(result)
+	i = 1
+	while result != nil
+		result = Nokogiri::HTML(result)
 
-	# 	File.open("db/test_files/product_url" + i.to_s  + ".html", 'w') { |file| file.write(result.to_s) }
+		File.open("db/test_files/product_url" + i.to_s  + ".html", 'w') { |file| file.write(result.to_s) }
 
-	# 	AmazonHelper.parse_products_off_result_page(result)
+		AmazonHelper.parse_products_off_result_page(result)
 
-	# 	next_url_chunk = result.css(".pagnNext").to_s
-	# 	next_url_start = next_url_chunk.index('<a href="')
-	# 	next_url_end = next_url_chunk.index('" class')
-	# 	next_url = next_url_chunk[next_url_start+9...next_url_end]
+		next_url_chunk = result.css(".pagnNext").to_s
+		next_url_start = next_url_chunk.index('<a href="')
+		next_url_end = next_url_chunk.index('" class')
+		next_url = next_url_chunk[next_url_start+9...next_url_end]
 
-	# 	next_url_chunks = next_url.split("&amp;")
+		next_url_chunks = next_url.split("&amp;")
 
-	# 	next_url = "";
+		next_url = "";
 
-	# 	next_url_chunks.each do |url_chunk|
-	# 		next_url = next_url + "&" + url_chunk
-	# 	end
+		next_url_chunks.each do |url_chunk|
+			next_url = next_url + "&" + url_chunk
+		end
 
-	# 	next_url = next_url[1...next_url.length]
+		next_url = next_url[1...next_url.length]
 
-	# 	puts next_url
-	# 	puts "\n"
-	# 	result = RestClient.get(next_url)
+		puts next_url
+		puts "\n"
+		result = RestClient.get(next_url)
 
-	# 	i = i+1
-	# end
+		i = i+1
+	end
 #END RUNNING AMAZON
 
 
 
 #BEGIN RUNNING GAMERSGATE
-
-GameSale.where(:store => "GamersGate").delete_all
-
 GamersGateHelper.parse_all_games
 #END RUNNING GAMERSGATE
 
