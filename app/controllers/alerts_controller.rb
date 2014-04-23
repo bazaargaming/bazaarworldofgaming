@@ -1,7 +1,7 @@
 class AlertsController < ApplicationController
 	def create
 		flash[:success] = "Alert was successfully created!"
-		redirect root_path
+		redirect_to :back
 	end
 	
 

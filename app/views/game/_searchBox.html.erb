@@ -5,7 +5,7 @@
 		<div class = "Input">
 			<div class "form-inline">
 				sort by: 
-				<%= radio_button_tag(:method, '0') %>
+				<%= radio_button_tag(:method, '0', :checked => (params[:method] == nil || params[:method] == '0')) %>
 				relevance
 				<%= radio_button_tag(:method, '1') %>
 				rating: high to low
