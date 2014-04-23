@@ -54,7 +54,7 @@ Game.delete_all
 				end
 
 
-			  puts(metacritic_url)
+			  	puts(metacritic_url)
 
 				score = GamesdbHelper.retrieve_metacritic_score(metacritic_url)
 
