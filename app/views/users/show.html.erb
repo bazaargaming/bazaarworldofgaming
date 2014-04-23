@@ -61,7 +61,7 @@
 <div class="container">
 <h5> Your Price Alerts </h5>
 <% if current_user.alerts.size == 0 %>
-    <p> You have not added any games to your collection </p>
+    <p> You have not added any price alerts</p>
 <% end %>
 <% current_user.alerts.each_with_index do |alert, i| %>
     <% alert_game = Game.find(alert.game_id) %>
@@ -114,7 +114,7 @@
                                 
                                 <%= form_for(alert)  do |alrt| %>
                                 <%= alrt.label :threshold %>
-                                <%= alrt.number_field :threshold, class: "form-control"  %>
+                                <%= alrt.number_field :threshold, :step=>"0.01", class: "form-control"  %>
                                 <%= alrt.submit "Change Threshold", class: "btn btn-primary " %>
                                 <% end %>
 
