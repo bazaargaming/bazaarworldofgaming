@@ -9,15 +9,26 @@
                 </div>
                 <div class="span6">
                     <div class = "user_name">
-                        <b><%= current_user.username %></b>
+                        <b>Hello, <%= current_user.name %>!</b>
                     </div>
                     <div class="row">
                         <div class="user_name_tags span2">
-                            <b>Games Owned:</b><%= current_user.games.size %>
+                            <b>Username: </b><%= current_user.username %>
                         </div>
                         <div class="user_name_tags span3">
                             <b>Email: </b><%= current_user.email %>
                         </div>
+                    </div>
+                    <div class="row">
+                        <div class="user_name_tags span2">
+                            <b>Games Added: </b><%= current_user.games.size %>
+                        </div>
+                        <div class="user_name_tags span2">
+                            <b>Price Alerts Set: </b><%= current_user.alerts.size %> 
+                        </div>
+                    </div>
+                    <div>
+                        <%= link_to "Edit Profile", edit_user_path(current_user) %>
                     </div>
                 </div>
             </div>

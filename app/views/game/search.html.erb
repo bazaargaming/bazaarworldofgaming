@@ -34,7 +34,7 @@
 		<%= will_paginate @results %>
 
 		<% @results.each do | result | %>
-			<% best = best_price(result) %>
+			<% best = GameHelper.best_price(result) %>
 			<div class="SearchResult row">
 			<div class="span1 boxArt">
 				<img src="<%= result.image_url%>"> </img>
