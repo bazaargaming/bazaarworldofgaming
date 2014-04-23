@@ -3,7 +3,7 @@ require 'json'
 module PriceHistoryHelper
 
 	def get_sales_histories(game)
-		cleaninghash = {"Amazon"=> {},"Steam"=> {},"GMG"=> {}}
+		cleaninghash = {"Amazon"=> {},"Steam"=> {},"GMG"=> {},"GamersGate"=>{}}
 		histories = game.game_sale_histories.order('occurred desc')
 		for h in histories
 			cur = cleaninghash[h.store][h.occurred.to_date]
