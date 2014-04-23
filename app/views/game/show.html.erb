@@ -78,7 +78,7 @@
             <div class="span1">
             <% if @alert == nil%>
             <!-- Button to trigger modal -->
-            <a href="#alertModal" role="button" class="btn btn-primary" data-toggle="modal">Set Alert</a>
+            <a href="#alertModal" role="button" class="btn btn-primary" data-toggle="modal">Create Alert</a>
             <%else%>
             <a href="#editModal" role="button" class="btn btn-primary" data-toggle="modal">Edit Alert</a>
             <%end%>
@@ -101,7 +101,7 @@
         </div>
     </div>
 
-     
+    <%if @alert == nil%>
     <!-- Modal -->
     <div id="alertModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="alertModalLabel" aria-hidden="true">
         <div class="modal-header">
@@ -109,11 +109,16 @@
             <h3 id="alertModalLabel">Set Alert</h3>
         </div>
         <div class="modal-body">
-            <% if current_user != nil && @alert == nil%>
+            <% if current_user != nil%>
                 <% @alert = Alert.new %>
                 <%= form_for (@alert) do |f| %>
                    <%= f.label (:threshold) %>
-                   $<%= f.number_field (:threshold), class: "form-control", value: @lowest.price%><br />
+                   $<%if @lowest != nil%>
+                        <%= f.number_field (:threshold), class: "form-control", value: @lowest.price%>
+                    <% else %>
+                        <%= f.number_field (:threshold), class: "form-control"%>
+                    <%end%>
+                   <br />
                    <%= hidden_field(:game, :id)%>
                    <%= hidden_field(:user, :id)%>
                    <%= f.submit "Set Alert",class: "btn btn-primary"%>
@@ -126,7 +131,7 @@
             <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
         </div>
     </div>
-
+    <%else%>
     <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                      <div class="modal-dialog">
                         <div class="modal-content">
@@ -151,6 +156,6 @@
                         </div>
                     </div>
                 </div>
-
+<%end%>
 
 </div>

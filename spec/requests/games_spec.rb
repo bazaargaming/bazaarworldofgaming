@@ -13,6 +13,8 @@ describe "Games" do
   		
   		before { visit ("/game/#{game.id}") }
   		it { should_not have_button('Add Game to Profile') }
+      it { should_not have_content('Create Alert')}
+      it { should_not have_content('Edit Alert')}
   	end
 
   	describe "button shows up only when logged in" do
@@ -25,6 +27,56 @@ describe "Games" do
   		end
   		it { should_not have_link('Sign in', href: signin_path) }
   		it { should have_button('Add Game to Profile') }
+      describe "proper alert buttons" do
+        describe "no alert" do
+          it{ should have_content('Create Alert')}
+        end
+        describe "with alert" do
+          before do
+            @alert = Alert.create({threshold: 15, game_id: game.id, user_id: user.id})
+            visit ("/game/#{game.id}")
+          end
+            it{ should have_content('Edit Alert')}
+          after do
+            @alert.destroy
+          end
+        end
+        describe "setting and editing an alert" do
+          before do
+            click_on "Create Alert"
+            fill_in "Threshold", with: 15
+            click_on "Set Alert"
+          end
+          it {should have_content("Alert was successfully created!")}
+          it {should have_content('Edit Alert')}
+          describe "editing" do
+            before{click_on "Edit Alert"}
+            describe "with valid info" do
+              before do 
+                fill_in "Threshold", with: 7
+                click_on "Change Threshold"
+              end
+              it {should have_content("Alert was successfully updated!")}
+              it "should have changed the alert" do 
+                expect( ( user.alerts & game.alerts)[0].threshold).to eq(7)
+              end
+            end
+            describe "with invalid info" do
+              before do
+                fill_in "Threshold", with: "hello"
+                click_on "Change Threshold"
+              end
+              it {should have_content("Alert could not be updated")}
+            end
+          end
+          after do
+            alert = (user.alerts & game.alerts)[0]
+            if alert
+              alert.destroy
+            end
+          end        
+        end
+      end
   	end
     describe "sales related" do
       before {game.game_sales.destroy_all}
