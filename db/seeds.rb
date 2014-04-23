@@ -91,7 +91,7 @@ require 'restclient'
 
 
 
-GameSale.where(:store => "Amazon").delete_all
+# GameSale.where(:store => "Amazon").delete_all
 
 
 # #BEGIN RUNNING AMAZON
