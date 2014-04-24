@@ -20,153 +20,7 @@ module AmazonHelper
 
 
     File.open("db/test_files/firstpage.html", 'w') { |file| file.write(result.to_s) }
-
-
-
-    # rows = result.css(".result.product")
-
-
-    # rows.each do |row|
-
-    #   puts row
-
-
-    #   title_chunk = row.css("a.title").to_s
-    #   title_start = title_chunk.index('">')
-    #   title_end = title_chunk.index("[")
-
-    #   if title_start == nil
-    #     puts("CAN'T FIND ANYTHING!!!?!")
-    #     next
-    #   end
-
-    #   title = title_chunk[title_start+2...title_end]
-
-    #   search_title = StringHelper.create_search_title(title)
-
-    #   game = GameSearchHelper.find_right_game(search_title, "no similar description")
-
-
-
-    #   amzn_price_chunk = row.css(".toeOurPrice").to_s
-    #   price_chunk_start = amzn_price_chunk.index('">$')
-    #   price_chunk_end = amzn_price_chunk.index('</a>')
-
-    #   sale_price = amzn_price_chunk[price_chunk_start+2...price_chunk_end]
-    #   puts sale_price
-
-    #   original_price = sale_price
-
-    #   original_price_chunk = row.css("strike").to_s
-
-    #   if original_price_chunk != ""
-    #     original_price_start = original_price_chunk.index('<strike>')
-    #     original_price_end = original_price_chunk.index('</strike>')
-    #     original_price = original_price_chunk[original_price_start+8...original_price_end]
-    #   end
-
-    #   puts original_price
-
-    #   product_url = row.css(".title").css("a")[0].to_s
-
-    #   link_start = product_url.index('<a class="title" href="')
-    #   link_end = product_url.index('">')
-
-    #   product_url = product_url[link_start+23...link_end]
-
-    #   puts product_url
-
-    #   if game == nil
-    #     #put new game into the database
-    #      #parse description, espn rating, boxart, developer, metacritic
-    #     # game_page_result = parse_game_page(product_url)
-    #     # mcurl = GamesdbHelper.build_metacritic_url(title)
-    #     # metacritic_rating = GamesdbHelper.retrieve_metacritic_score(mcurl)
-    #     # release_date = parse_date(game_page_result)
-    #     # game_description = parse_description(game_page_result)
-    #     # box_art_url = parse_box_art(game_page_result)
-    #     # game = Game.create!(title: title, release_date: release_date, 
-    #     #                     description: game_description,  publisher: nil, developer: nil, 
-    #     #                     genres: nil, image_url: box_art_url, search_title: search_title, 
-    #     #                     metacritic_rating: metacritic_rating)
-    #     # puts "Game Added To Database"
-
-    #     next
-
-
-    #   else
-
-    #     if GameSearchHelper.are_games_same(search_title, game.search_title, "you will find no match", game.description)
-    #       puts "Match found!"
-    #       puts search_title
-    #       puts game.search_title
-    #     else
-    #       puts "Need to make a new game based off of the found one's info"
-    #       game_page_result = parse_game_page(product_url)
-    #       box_art_url = parse_box_art(game_page_result)
-    #       freshgame = Game.create!(title: title, release_date: game.release_date, description: game.description, publisher: game.publisher, 
-    #         developer: game.developer, genres: game.genres, search_title: search_title, metacritic_rating: game.metacritic_rating, image_url: box_art_url)
-
-    #       puts search_title
-    #       puts game.search_title
-
-    #       game = freshgame
-
-    #     end
-
-
-
-
-    #   end
-
-
-
-
-
-
-    #   original_price = '%.2f' %  original_price.delete( "$" ).to_f
-    #   sale_price = '%.2f' %  sale_price.delete( "$" ).to_f
-
-
-    #   amazon_sales = game.game_sales.where(["store = ?", "Amazon"])
-
-
-    #   if amazon_sales == nil or amazon_sales.length == 0
-
-
-
-    #         game_sale = game.game_sales.create!(store: "Amazon", 
-    #                                             url: product_url, 
-    #                                             origamt: original_price, 
-    #                                             saleamt: sale_price,
-    #                                             occurrence: DateTime.now)
-    #         game_sale_history = game.game_sale_histories.create!(store: "Amazon",
-    #                                                              price: sale_price,
-    #                                                              occurred: DateTime.now)
-    #   end
-
-    # end
-
-
   end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   def self.parse_title(row)
       title = row.css(".productTitle")
@@ -321,22 +175,8 @@ module AmazonHelper
       game = GameSearchHelper.find_right_game(search_title, "you will find no match")
       product_url = parse_url(row)
       if game == nil
-        #put new game into the database
-	       #parse description, espn rating, boxart, developer, metacritic
-        # game_page_result = parse_game_page(product_url)
-        # mcurl = GamesdbHelper.build_metacritic_url(title)
-        # metacritic_rating = GamesdbHelper.retrieve_metacritic_score(mcurl)
-        # release_date = parse_date(game_page_result)
-        # game_description = parse_description(game_page_result)
-        # box_art_url = parse_box_art(game_page_result)
-        # game = Game.create!(title: title, release_date: release_date, 
-        #                     description: game_description,  publisher: nil, developer: nil, 
-        #                     genres: nil, image_url: box_art_url, search_title: search_title, 
-        #                     metacritic_rating: metacritic_rating)
-        # puts "Game Added To Database"
 
         next
-
 
       else
 
@@ -373,10 +213,6 @@ module AmazonHelper
       prices = parse_price_chunk(row)
       sale_price = prices[0]
       original_price = prices[1]
-      #puts title
-      #puts original_price
-      #puts sale_price
-      #puts "game found!"
       original_price = '%.2f' %  original_price.delete( "$" ).to_f
       sale_price = '%.2f' %  sale_price.delete( "$" ).to_f
       puts product_url
@@ -404,4 +240,44 @@ module AmazonHelper
     end
   end
 
+  def self.parse_amazon_site
+    AmazonHelper.parse_first_sale_page
+
+    AMAZON_STORE_BASE_URL = 'http://www.amazon.com/s?ie=UTF8&page=2&rh=n%3A2445220011'
+
+    AmazonHelper.parse_first_sale_page
+
+    next_url = AMAZON_STORE_BASE_URL
+
+    result = RestClient.get(next_url)
+
+
+
+    while result != nil
+      result = Nokogiri::HTML(result)
+
+
+      AmazonHelper.parse_products_off_result_page(result)
+
+      next_url_chunk = result.css(".pagnNext").to_s
+      next_url_start = next_url_chunk.index('<a href="')
+      next_url_end = next_url_chunk.index('" class')
+      next_url = next_url_chunk[next_url_start+9...next_url_end]
+
+      next_url_chunks = next_url.split("&amp;")
+
+      next_url = "";
+
+      next_url_chunks.each do |url_chunk|
+        next_url = next_url + "&" + url_chunk
+      end
+
+      next_url = next_url[1...next_url.length]
+
+      puts next_url
+      puts "\n"
+      result = RestClient.get(next_url)
+    end    
+  end
+  
 end

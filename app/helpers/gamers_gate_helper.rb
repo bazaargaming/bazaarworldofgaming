@@ -174,7 +174,7 @@ module GamersGateHelper
 
 	end
 
-	def self.parse_all_games
+	def self.parse_ggate_site
 
 		page_number = 1
 		parsing = true

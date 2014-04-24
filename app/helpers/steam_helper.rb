@@ -39,19 +39,7 @@ module SteamHelper
   def self.get_description(page)
     game_description = page.at_xpath('//*[@id="game_highlights"]/div[2]/div/div[2]').to_s
     game_description = game_description[38...game_description.length - 6]
-    # if game_description.include? "Requires the base game"
 
-    #   puts "dlc descrip!"
-    #   description_area = page.css("div#game_area_description").to_s
-
-    #   description_start = description_area.index("<h2>About the Game</h2>")
-
-
-    #   description_area = description_area[description_start+23...description_area.length]
-
-    #   puts description_area
-
-    # end
 
     return game_description
 
@@ -321,21 +309,46 @@ module SteamHelper
 
 
 
-
-    # if original_price == ""
-    #   puts "Free to play!"
-    # else
-    #   puts original_price
-    # end
-
-    # if sale_price == ""
-    #   puts "Not on sale!"
-    # else
-    #   puts sale_price
-    # end
-
-
   end
+
+
+
+
+  def self.parse_steam_site
+    i = 1
+
+    until i == 300
+      app_base_url = 'http://steamdb.info/apps/page' + i.to_s + '/'
+
+      steam_store_base_url = 'http://store.steampowered.com/app/'
+
+      result = Nokogiri::HTML(open(app_base_url))
+
+      rows = result.css("table#table-apps")
+
+      rows = rows.css("tbody")
+      rows = rows.css("tr")
+
+      rows.each do |row|
+        row_info = row.css("td")
+
+        row_info_2 = row_info[2].to_s
+
+        if row_info[1].to_s.include? "Game" or row_info[1].to_s.include? "DLC"
+          row_info_app_string = row_info[0].to_s
+          start_index = row_info_app_string.index('">')
+          end_index = row_info_app_string.index('</a>')
+          store_id = row_info_app_string[start_index+2...end_index]
+
+          url = steam_store_base_url + store_id
+          SteamHelper.extract_page_info(url)
+
+        end
+      end
+      i = i + 1;
+    end    
+  end
+  
 end
 
 
