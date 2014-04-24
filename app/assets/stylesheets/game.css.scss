@@ -13,6 +13,15 @@
 .button{padding-bottom:20px;}
 .data{
 }
+.Input {
+  display: inline;
+}
+input#low{
+ width:10%;
+}
+input#high{
+ width:10%;
+}
 
 td{padding: 5px;}
 
@@ -41,4 +50,24 @@ height: 65px;
 .releaseDate {
 margin-top:10px;
 padding-bottom:0px;
+}
+
+fieldset.search-box {
+	width:75%;
+    border: 2px groove #ddd !important;
+    padding: 0 1.4em 1.4em 1.4em !important;
+    margin: 0 0 1.5em 0 !important;
+    -webkit-box-shadow:  0px 0px 0px 0px #000;
+            box-shadow:  0px 0px 0px 0px #000;
+    -moz-border-radius: 15px;
+	border-radius: 15px;
+}
+
+legend.search-box {
+	font-size: 1.2em !important;
+    font-weight: bold !important;
+    text-align: left !important;
+    width:80px;
+    padding:0 10px;
+    border-bottom:none;
 }

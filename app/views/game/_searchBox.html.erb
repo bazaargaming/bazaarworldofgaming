@@ -1,31 +1,32 @@
-<%= form_tag("/game/search", method: "get") do %>
-	<%= text_field_tag(:stuff, params[:stuff]) %>
-	<%= submit_tag("Search") %>
-	<div>
-		<div class = "Input">
-			<div class "form-inline">
-				sort by: 
-				<%= radio_button_tag(:method, '0', :checked => (params[:method] == nil || params[:method] == '0')) %>
-				relevance
-				<%= radio_button_tag(:method, '1') %>
-				rating: high to low
-				<%= radio_button_tag(:method, '2') %>
-				rating: low to high
-				<br>show games with rating from
-				<%= text_field_tag(:low, 0) %>
-				to
-				<%= text_field_tag(:high, 100) %>
+<fieldset class="search-box">
+	<legend class="search-box">Search</legend>
+	<%= form_tag("/game/search", method: "get") do %>
+		<%= text_field_tag(:stuff, params[:stuff]) %>
+		<%= submit_tag("Search") %>
+		<div>
+			<div class = "Input">
+				<div class "form-inline">
+					Sort by: 
+					<%= radio_button_tag(:method, '0', :checked => (params[:method] == nil || params[:method] == '0')) %>
+					Relevance
+					<%= radio_button_tag(:method, '1') %>
+					Rating: High to Low
+					<%= radio_button_tag(:method, '2') %>
+					Rating: Low to High
+					<br>
+					Filter for Ratings: 
+					<%= text_field_tag(:low, 0, { size: 10 }) %>
+					to
+					<%= text_field_tag(:high, 100, { size: 10}) %>
+				</div>
+				<div style="width:40%">
+            		Genres:
+            		<%= select_tag(:genre, options_for_select(GameSearchHelper.get_genres, params[:genre])) %>
+            		<br>
+            		Items Per Page:
+            		<%= select_tag(:per, options_for_select(GameSearchHelper.get_page_options, params[:per])) %>
+          		</div>
 			</div>
 		</div>
-	</div>
-        <div class = "Input">
-          <!--<%= button_tag("Sports", name: "genre", value: "Sports") %> -->
-          
-          <div style="width:25%">
-            Genres:
-            <%= select_tag(:genre, options_for_select(GameSearchHelper.get_genres, params[:genre])) %><br>
-            Items Per Page:
-            <%= select_tag(:per, options_for_select(GameSearchHelper.get_page_options, params[:per])) %>
-          </div>
-        </div>
-<% end %>
+	<% end %>
+</fieldset>
