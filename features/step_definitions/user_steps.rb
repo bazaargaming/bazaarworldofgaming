@@ -9,7 +9,8 @@ When /^they enter invalid user credentials$/ do
 end
 
 Then /^they should still see signin link$/ do
-	expect(page).to have_link('Sign in', href: signin_path)
+	expect(page).to have_link('Log in', href: signin_path)
+	expect(page).to have_link('Sign up', href: signup_path)
 	expect(page).to_not have_link('Sign out', href: signout_path)
 end
 
