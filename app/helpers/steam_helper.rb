@@ -322,7 +322,27 @@ module SteamHelper
 
       steam_store_base_url = 'http://store.steampowered.com/app/'
 
-      result = Nokogiri::HTML(open(app_base_url))
+
+
+      result = nil
+      begin
+        file = open(app_base_url)
+        result = Nokogiri::HTML(file) do
+          # handle doc
+        end
+      rescue OpenURI::HTTPError => e
+        if e.message == '404 Not Found'
+          break
+        else
+          break
+        end
+      end
+
+
+     # result = Nokogiri::HTML(open(app_base_url))
+
+      if (result == nil)
+      end
 
       rows = result.css("table#table-apps")
 
@@ -346,6 +366,8 @@ module SteamHelper
         end
       end
       i = i + 1;
+
+
     end    
   end
   
