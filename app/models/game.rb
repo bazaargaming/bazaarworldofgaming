@@ -10,14 +10,6 @@ class Game < ActiveRecord::Base
   has_many :alerts, dependent: :destroy
 
 
-
-
-
-
-
-
-
-
  def get_lowest_sale_per_vendor
 
  	results = []

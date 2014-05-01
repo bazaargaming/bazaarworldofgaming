@@ -264,10 +264,6 @@ module AmazonHelper
       next_url_chunk = result.css(".pagnNext").to_s
 
 
-
-
-
-
       next_url_start = next_url_chunk.index('href="')
       next_url_end = next_url_chunk.index('">')
 
