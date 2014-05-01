@@ -1,4 +1,4 @@
-#Bazaar World Of Game README
+#Bazaar World Of Gaming
 Note: For instructions of running the web app view the INSTALL file
 
 ##Project Description
