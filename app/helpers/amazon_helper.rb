@@ -245,7 +245,7 @@ module AmazonHelper
   def self.parse_amazon_site
     AmazonHelper.parse_first_sale_page
 
-    amazon_store_base_url = 'http://www.amazon.com/s?ie=UTF8&page=399&rh=n%3A2445220011'
+    amazon_store_base_url = 'http://www.amazon.com/s?ie=UTF8&page=2&rh=n%3A2445220011'
 
     AmazonHelper.parse_first_sale_page
 
