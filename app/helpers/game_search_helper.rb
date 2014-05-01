@@ -4,6 +4,10 @@ require 'timeout'
 require 'restclient'
 
 
+##
+# This module is used to resolve conflicts in searching for games, as well as 
+# resolve naming differences between games that may be the same, but might have different titles according to vendors
+#
 module GameSearchHelper
 
   def self.genre_list
@@ -23,12 +27,16 @@ module GameSearchHelper
     ["strategy"],["sports"],["stealth"],
     ["simulation","Construction and Management Simulation","Vehicle Simulation","Life Simulation","Flight Simulation"],
     ["Fighting"],["Puzzle"],["Platform"],["Music"],["Family"], ["Indie"], ["Educational"], ["Mac"]]
-
-
   end
+
+
+  #This is a map of words that account for differences in how vendors name certain games
+  #This map is checked when comparing a parsed title to titles in the database, to ensure that we don't 
+  #miss detecting whether or not the parsed game is already in the database
+
   def self.potential_messed_up_words
     [["super heroes", "superheroes"],["civilization", "sid meiers civilization"], ["standard edition", ""], ["40k", "40000"], ["2","ii"], ["goty", "game of the year"], ["goty", "game of the year edition"], ["bundle", "collection"],["rise of caesar", "the rise of caesar"],
-["master thief edition", "thief master thief edition"]]
+      ["master thief edition", "thief master thief edition"]]
   end
 
   def self.roman_numerals
@@ -52,7 +60,6 @@ module GameSearchHelper
     del_char(words_list)
 
     search_title = StringHelper.create_search_title(title)
-    # puts "search_title = " + search_title
     exact_matches = Game.where("search_title LIKE ?", "%" + search_title + "%")
     title_roman = handle_roman_numeral(search_title)
     roman_matches = Game.where("search_title LIKE ?", "%" + title_roman + "%")
@@ -167,6 +174,11 @@ module GameSearchHelper
 
 
  
+  ##
+  # Given a parsed title and a parsed description, trys to see
+  # if the appropriate/similar game is already in the database. If it is
+  # return that pre-existing game
+  #
 
   def self.find_right_game(title, description)
 
@@ -174,15 +186,19 @@ module GameSearchHelper
     search_title = StringHelper.create_search_title(title)
     games_in_db = Game.where("search_title =?", search_title)
 
+    #if we don't find anything by the baseline search title
     if games_in_db.length == 0
       puts "Game Not found! Trying to resolve now!"
+
+      #check by the game description
       games_in_db = Game.where("description =?", description)
 
       if games_in_db.length != 0
         puts "Match Found!: " + search_title
         return games_in_db.first
       end
-      #romane numerals
+
+      #check by roman numerals to numbers
       title_roman = handle_roman_numeral(search_title)
       games_in_db = Game.where("search_title =?", title_roman)
       if games_in_db.length != 0
@@ -190,7 +206,7 @@ module GameSearchHelper
         return games_in_db.first
       end
 
-      #numbers & words
+      #check by numbers to roman numerals
       title_number = handle_numbers(search_title)
       games_in_db = Game.where("search_title =?", title_number)
       if games_in_db.length != 0
@@ -198,9 +214,10 @@ module GameSearchHelper
         return games_in_db.first
       end
 
+      #go into some more specific means of resolving name misses
       GameSearchHelper.resolve_name_miss_of_vendor_title(search_title)
 
-
+    #otherwise we found a similar game, so return it
     else
       puts "Match Found!: " + search_title
       return games_in_db.first
@@ -208,6 +225,11 @@ module GameSearchHelper
   end
 
 
+  ##
+  # Given a search title, and two words, depending on which of the two words is in the search title,
+  # substitute that word for the second, and then see if the newly substitued search title is contained by 
+  # a game in the database. If it is, return that game. Otherwise, return nil.
+  #
 
   def self.resolve_messed_up_words(search_title_original, word1, word2)
 
@@ -237,9 +259,10 @@ module GameSearchHelper
 
   end
 
-
-  #this method takes the vendor title and sees if it can tweak the vendor title to
-  #find a match in the game database
+  ##
+  # Given a search title from a parsed game page, see if we can tweak the vendor title to
+  # find a match in the game database. If we can, return that match, otherwise, return nil
+  #
   def self.resolve_name_miss_of_vendor_title(search_title_original)
 
     #try adding the word edition, sometimes it gets missed
@@ -263,10 +286,7 @@ module GameSearchHelper
       return games_in_db.first
     end
 
-    #here we'll try words that may be messed up, NOTE FOR EACH WORD DIFFERENTIAL WE CHECK HERE, NEED TO ADD 
-    #A SIMILAR CHECK TO are_games_same. IF TIME PERMITS, LOOK INTO REFACTORING THIS COUPLED CHANGE. 
-
-    #super heroes as superheroes
+    #here we'll try words that may be messed up
     GameSearchHelper.potential_messed_up_words.each do |words|
       game = GameSearchHelper.resolve_messed_up_words(search_title_original, words[0], words[1])
       if game != nil 
@@ -274,20 +294,9 @@ module GameSearchHelper
       end
     end
 
-    #civilization and sid meier's civilization
-    #game = GameSearchHelper.resolve_messed_up_words(search_title_original, "civilization", "sid meiers civilization")
-    #if game != nil 
-     # return game
-    #end
-
-  
-
-
-
-
-    #try other words too
- 
-    #now we try chopping off the word edition, etc.
+    # now we try chopping off versioning/edition words that may cause the title to be different
+    # This is useful for finding similar games in the database, i.e. if we are parsing the game of the year version
+    # of a game already in the database, or a special edition version, etc...
 
     search_title = search_title_original
 
@@ -310,14 +319,13 @@ module GameSearchHelper
   end
 
 
-
+  ##
+  # Takes two search titles, and two words, and determines
+  # if the titles are off by one of those two words due to different vendors naming the same game differently.
+  # If the titles turn out to be a match based off of this, return true, otherwise return false
+  # 
   def self.are_titles_same_but_diff_words(first_search_title, second_search_title, word1, word2)
-    # if first_search_title.include? word1 and second_search_title.include? word2
-    #   return true
-    # end
-    # if first_search_title.include? word2 and second_search_title.include? word1
-    #   return true
-    # end
+
 
     if first_search_title.include? word1 and second_search_title.include? word2
       ss = first_search_title.gsub(word1, word2)
@@ -353,14 +361,14 @@ module GameSearchHelper
       end
 
     end
-
-
   end
 
-
-  #this method takes two search titles, and descriptions, and determines
-  #if the titles are in reality for the exact same game, either due to the titles being
-  #directly equal, or simply named differently, or if they have the exact same game description
+  ##
+  # Takes two search titles, and descriptions, and determines
+  # if the titles are in reality for the exact same game, either due to the titles being
+  # directly equal, or simply named differently, or if they have the exact same game description
+  # Returns true if they are the same, false otherwise.
+  # 
   def self.are_games_same(first_search_title, second_search_title, first_game_descrip, second_game_descrip)
 
     if first_search_title == second_search_title
@@ -384,25 +392,20 @@ module GameSearchHelper
     end
 
 
-    #here we try word differentials
+    #here we try common word groups that contain words different vendors use to represent the same word/part of a title 
 
     GameSearchHelper.potential_messed_up_words.each do |words|
-      #superheroes
       if GameSearchHelper.are_titles_same_but_diff_words(first_search_title, second_search_title, words[0], words[1])
         return true
       end
     end
-      #civilization and sid meier's civilization
-      #if GameSearchHelper.are_titles_same_but_diff_words(first_search_title, second_search_title, "civilization", "sid meiers civilization")
-      #  return true
-      #end
-
-
-      #try others here
 
 
     return false
   end
+
+
+  
 
   def self.filter_by_genre(genre, game_list)
     results = []
