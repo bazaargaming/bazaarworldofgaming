@@ -8,7 +8,11 @@ require 'restclient'
 # # TODO: First wipe out the sales database, then run steam, then run gmg, then run amazon
 
 
-Game.delete_all
+require 'nokogiri'
+require 'open-uri'
+require 'timeout'
+
+
 
 
 	VIABLE_CONSOLE_LIST = ["PC"]
@@ -17,6 +21,8 @@ Game.delete_all
 	@client = Gamesdb::Client.new
  	platforms = @client.platforms.all
 
+ 	id_list = [936, 2511, 902, 16252, 19934]
+
 
 	platforms.each do |platform| unless !(VIABLE_CONSOLE_LIST.include?(platform.name))
 		puts(platform.name)
@@ -24,9 +30,10 @@ Game.delete_all
 		platform_games_wrapper = @client.get_platform_games(platform.id)
 		platform_games = platform_games_wrapper["Game"]
 		if (!(platform_games.nil?) && platform.id != "4914")
-			platform_games.each do |platform_game|
-				gameinfo = GamesdbHelper.fetch_game_info(platform_game["id"],@client)
+			id_list.each do |id|
+				gameinfo = GamesdbHelper.fetch_game_info(id,@client)
 				if GamesdbHelper.game_exists_in_db?(gameinfo[:title],gameinfo[:platform])
+					puts "have it"
 					next
 				end
 
@@ -37,11 +44,9 @@ Game.delete_all
 				end
 
 
-			  	puts(metacritic_url)
+			  puts(metacritic_url)
 
 				score = GamesdbHelper.retrieve_metacritic_score(metacritic_url)
-
-				gameinfo[:metacritic_rating] = score
 
 				puts score
 
@@ -57,6 +62,18 @@ Game.delete_all
 end
 
 
+	SteamHelper.extract_page_info("http://store.steampowered.com/app/8870/")
+	SteamHelper.extract_page_info("http://store.steampowered.com/app/72850/")
+	SteamHelper.extract_page_info("http://store.steampowered.com/app/8930/")
+	SteamHelper.extract_page_info("http://store.steampowered.com/app/242050/")
+	SteamHelper.extract_page_info("http://store.steampowered.com/app/265930/")
+
+	GmgHelper.getSalePageInfo("http://www.greenmangaming.com/s/us/en/pc/games/shooter/bioshock-infinite-na/")
+	GmgHelper.getSalePageInfo("http://www.greenmangaming.com/s/us/en/pc/games/rpgs/elder-scrolls-v-skyrim/")
+	GmgHelper.getSalePageInfo("http://www.greenmangaming.com/s/us/en/pc/games/strategy/sid-meiers-civilization-v/")
+	GmgHelper.getSalePageInfo("http://www.greenmangaming.com/s/us/en/pc/games/simulation/goat-simulator/")
+	GmgHelper.getSalePageInfo("http://www.greenmangaming.com/s/us/en/pc/games/action/assassins-creed-iv-black-flag-na/")
 
 
-
+	AmazonHelper.parse_amazon_site
+	GamersGateHelper.parse_ggate_site
