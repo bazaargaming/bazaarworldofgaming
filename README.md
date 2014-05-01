@@ -11,3 +11,13 @@ Bazaar World of Gaming is a web app which:
 3. Allows users to manage sale alerts on games and 
 4. Lets users browse sales on games by genre and reviewer ratings
 
+##Contributors
+The contributors to this project are in no particular order
+
+* Arjun Garg 	     - 	garg14
+* Ben Levy 	     -	bllevy2
+* Peter Meade	     -	meade4
+* Michael Blasingame -	blasing2
+* Jiwoong Youn	     - 	youn8
+* Qiyue Zhu	     - 	zhu72
+* Zhuoyuan Li	     -  li156	
