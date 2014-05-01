@@ -189,6 +189,4 @@ module GamersGateHelper
 	end
 
 
-
-
 end

@@ -23,7 +23,7 @@ module AmazonHelper
   end
 
   def self.parse_title(row)
-      title = row.css(".productTitle")
+      title = row.css("a.title")
       title = title.to_s
       title_encode = title.encode("UTF-8", invalid: :replace, undef: :replace)
       if !(title_encode.valid_encoding?)
@@ -37,9 +37,9 @@ module AmazonHelper
         puts "Not avaliable on PC!"
         return nil
       end
-      title_start = title.index('<br clear="all">')
+      title_start = title.index('">')
       title_end = title.index("[")
-      title = title[title_start+16...title_end]
+      title = title[title_start+2...title_end]
       puts title
       return title
 
@@ -57,16 +57,18 @@ module AmazonHelper
   end
 
   def self.parse_sale_price(price_chunk)
-      sale_price_start = price_chunk.index("<span>")
-      sale_price_end = price_chunk.index("</span>")
-      return price_chunk[sale_price_start+6...sale_price_end]
+      sale_price_start = price_chunk.index('">$')
+      sale_price_end = price_chunk.index("</a>")
+      return price_chunk[sale_price_start+2...sale_price_end]
          
   end
 
   def self.parse_price_chunk(row)
-      price_chunk = row.css(".newPrice").to_s
+      price_chunk = row.css(".toeOurPrice").to_s
       sale_price = parse_sale_price(price_chunk)
       original_price = sale_price
+
+      price_chunk = row.css(".toeListPrice").to_s
       if price_chunk.include? "<strike>"
         original_price = parse_original_price(price_chunk)
       end
@@ -82,10 +84,10 @@ module AmazonHelper
 
 
   def self.parse_url(row)
-      product_url = row.css(".productTitle").css("a")[0].to_s
-      link_start = product_url.index('<a href="')
+      product_url = row.css("a.title").to_s
+      link_start = product_url.index('href="')
       link_end = product_url.index('">')
-      return product_url[link_start+9...link_end]
+      return product_url[link_start+6...link_end]
 
 
   end
@@ -243,11 +245,11 @@ module AmazonHelper
   def self.parse_amazon_site
     AmazonHelper.parse_first_sale_page
 
-    AMAZON_STORE_BASE_URL = 'http://www.amazon.com/s?ie=UTF8&page=2&rh=n%3A2445220011'
+    amazon_store_base_url = 'http://www.amazon.com/s?ie=UTF8&page=399&rh=n%3A2445220011'
 
     AmazonHelper.parse_first_sale_page
 
-    next_url = AMAZON_STORE_BASE_URL
+    next_url = amazon_store_base_url
 
     result = RestClient.get(next_url)
 
@@ -255,14 +257,27 @@ module AmazonHelper
 
     while result != nil
       result = Nokogiri::HTML(result)
-
+      File.open("db/test_files/product_url"  +".html", 'w') { |file| file.write(result.to_s) }
 
       AmazonHelper.parse_products_off_result_page(result)
 
       next_url_chunk = result.css(".pagnNext").to_s
-      next_url_start = next_url_chunk.index('<a href="')
-      next_url_end = next_url_chunk.index('" class')
-      next_url = next_url_chunk[next_url_start+9...next_url_end]
+
+
+
+
+
+
+      next_url_start = next_url_chunk.index('href="')
+      next_url_end = next_url_chunk.index('">')
+
+      
+      if next_url_start == nil
+        break
+      end
+
+
+      next_url = next_url_chunk[next_url_start+6...next_url_end]
 
       next_url_chunks = next_url.split("&amp;")
 
@@ -276,6 +291,13 @@ module AmazonHelper
 
       puts next_url
       puts "\n"
+
+      next_url = 'http://www.amazon.com' + next_url
+
+      puts next_url
+      puts "\n"
+
+
       result = RestClient.get(next_url)
     end    
   end
