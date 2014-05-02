@@ -1,3 +1,4 @@
+#This model keeps track of all current game sales
 class GameSale < ActiveRecord::Base
 	attr_accessible  :occurrence, :store, :url, :origamt, :saleamt
 	validates :occurrence,  presence: true

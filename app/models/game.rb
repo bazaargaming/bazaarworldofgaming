@@ -1,3 +1,7 @@
+
+# This is the main model of the system. These are what contain
+# all the information about each title and also have a reference to 
+# any sales and sale histories related to a title
 class Game < ActiveRecord::Base
   serialize :genres, Array
   attr_accessible :search_title, :coop, :description, :platform, :developer, :esrb_rating, :genres, :image_url, :metacritic_rating, :players, :publisher, :release_date, :title
@@ -9,7 +13,9 @@ class Game < ActiveRecord::Base
   has_many :game_sale_histories, dependent: :destroy
   has_many :alerts, dependent: :destroy
 
-
+#This returns a list of with 4 entries 1 for each of the store.
+#If there is more than one sale from a store associated with a game
+#then it will return the lower cost
  def get_lowest_sale_per_vendor
 
  	results = []
