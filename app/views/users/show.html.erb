@@ -63,53 +63,36 @@
 
         <% if current_user.alerts.size == 0 %>
             <p> You have not added any price alerts</p>
-        <% end %>
-
-        <% current_user.alerts.each_with_index do |alert, i| %>
-            <% alert_game = Game.find(alert.game_id) %>
-            
-            <div class="SearchResult row">
-                <div class="span1 boxArt">
-                    <img src="<%= alert_game.image_url%>"> </img>
-                </div>
-
-                <div class = "span8 display">
-                    <div class = "row">
-                        <div class = "span7 gameTitle">
-                            <h4>
-                                <%= link_to alert_game.title, :controller => "game", :action => "show", :id => alert_game.id %>
-                            </h4>
+	<% else %>
+	    <% @arrays = UsersHelper.get_alerts_in_groups(current_user) %>
+            <% @arrays.each do |row| %>
+                <div class="row">
+                    <% row.each do |alert| %>
+			<% alert_game = Game.find(alert.game_id) %>
+                        <div class="game-thumb-cont span2">
+                            <a href="<%= game_path(alert_game) %>" class="game-thumbnail thumbnail">
+                                <img src="<%= alert_game.image_url %>" alt="..." />
+                                <div class = "thumbnail_title">
+                                    <%= alert_game.title %>
+                                </div>
+                            </a>
+			    <div class = "alert_container">
+			    <% if signed_in? %>
+                        	$<%= alert.threshold %> <button data-toggle = "modal" data-target = "#editModal"> Edit </button>
+			    </div>
+			    <div class = "alert_button">
+                        	<%= button_to "Delete", alert_path(alert), :method => :delete, :confirm => "Are you Sure?" %>
+			    </div>
+                   	    <% end %>
+                   	    <% @alert = alert %>
+                    	    <%= render 'shared/editModal'%>
                         </div>
-                        <div class = "pull-right releaseDate">
-                            <span class="label label-default"><%= alert_game.release_date%></span>
-                        </div>
-                    </div>
-                    <div class = "description" id = "dot1">
-                        <%= alert_game.description%>
-                    </div>
-                    <div class = "labels">
-                        <div class="pull-left">
-
-                            <span class="label label-info"> Theshold = <%= alert.threshold %></span>
-                            
-                        </div>  
-                        <div class="pull-right">
-                            <% alert_game.genres.each do |genre| %>
-                                <span class="label label-info"><%= genre %></span>
-                            <% end %>
-                        </div>         
-                    </div>
-                    <br />
-                    <% if signed_in? %>
-                        <button data-toggle = "modal" data-target = "#editModal"> Edit </button>
-
-                        <%= button_to "Delete", alert_path(alert), :method => :delete, :confirm => "Are you Sure?" %>
-
+			
                     <% end %>
-                    <% @alert = alert %>
-                    <%= render 'shared/editModal'%>
                 </div>
-            </div>
+            <% end %>
         <% end %>
+
+        
     </div>
 </div>
