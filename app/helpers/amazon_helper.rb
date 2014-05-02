@@ -3,9 +3,15 @@ require 'open-uri'
 require 'timeout'
 require 'restclient'
 
-
+##
+# This helper module contains functions for parsing games off of 
+# Amazon's website. 
+#
 module AmazonHelper
-  
+  ##
+  # Used to parse the amazon front sale page
+  # gets sale information from the front sale page and puts in database
+  #
   def self.parse_first_sale_page
     amzn_first_page_url = "http://www.amazon.com/s?ie=UTF8&page=1&rh=n%3A2445220011"
 
@@ -18,6 +24,11 @@ module AmazonHelper
 
   end
 
+  ##
+  # Used to get title of game from html text
+  # Takes in the html string that contains the title
+  # obtains the title of the game returns it
+  #
   def self.parse_title(row)
       title = row.css("a.title")
       title = title.to_s
@@ -41,6 +52,11 @@ module AmazonHelper
 
   end
 
+  ##
+  # Used to get the avaibility of game from html text
+  # Takes in the html string that contains the avaibility
+  # returns boolean true if game is available else false
+  #
   def self.get_avaibility(row)
      if row.to_s.include? "Sign up to be notified when this item becomes available."
         return false
@@ -52,6 +68,11 @@ module AmazonHelper
       return true
   end
 
+  ##
+  # Used to get the sale price of game from html text
+  # Takes in the html string that contains the sale price
+  # returns the sale price of the game
+  #
   def self.parse_sale_price(price_chunk)
       sale_price_start = price_chunk.index('">$')
       sale_price_end = price_chunk.index("</a>")
@@ -59,6 +80,11 @@ module AmazonHelper
          
   end
 
+  ##
+  # Used to get the both the sale and original price of game from html text
+  # Takes in the html string that contains the sale price and original price
+  # returns the sale and original price of the game
+  #
   def self.parse_price_chunk(row)
       price_chunk = row.css(".toeOurPrice").to_s
       sale_price = parse_sale_price(price_chunk)
@@ -72,22 +98,34 @@ module AmazonHelper
 
   end
 
+  ##
+  # Used to get the original price of game from html text
+  # Takes in the html string that contains the original price
+  # returns the original price of the game
+  #
   def self.parse_original_price(price_chunk)
         original_price_start = price_chunk.index("<strike>")
         original_price_end = price_chunk.index("</strike>")
         return price_chunk[original_price_start+8...original_price_end]
   end
 
-
+  ##
+  # Used to get game url of the game from html text
+  # Takes in the html string that contains the urls of the game
+  # returns the product url of the game
+  #
   def self.parse_url(row)
       product_url = row.css("a.title").to_s
       link_start = product_url.index('href="')
       link_end = product_url.index('">')
       return product_url[link_start+6...link_end]
-
-
   end
 
+  ##
+  # Used to get the product rating of the game from html text
+  # Takes in the html string that contains the product rating
+  # returns the product rating of the game
+  #
   def self.parse_rating(product_html)
     page_s = product_html.to_s
     rating_start = page_s.index("esrbPopOver")
@@ -98,9 +136,13 @@ module AmazonHelper
       rating = rating[start_index+31...end_index]
       return rating
     end
-
   end
 
+  ##
+  # Used to get  developer of the game from html text
+  # Takes in the html string that contains the developer of the game
+  # returns the developer of the game
+  #
   def self.parse_developer(product_html)
     page_s = product_html.to_s
     developer_start = page_s.index('ptBrand')
@@ -114,6 +156,11 @@ module AmazonHelper
 
   end
 
+  ##
+  # Used to get release date of the game from html text
+  # Takes in the html string that contains the release date of the game
+  # returns the release date of the game
+  #
   def self.parse_date(product_html)
     page_s = product_html.to_s
     date_start = page_s.index("Release Date")
@@ -124,9 +171,13 @@ module AmazonHelper
       date = date[start_index+5...end_index]
       return date
     end
-
   end
 
+  ##
+  # Used to get box art url of the game from html text
+  # Takes in the html string that contains the box art of the game
+  # returns the box art of the game
+  #
   def self.parse_box_art(product_html)
     page_s = product_html.to_s
     img_start = page_s.index('id="main-image"')
@@ -140,14 +191,22 @@ module AmazonHelper
 
   end
 
-
-
+  ##
+  # Used to get html page of the game from html url
+  # Takes in the html url that contains the game page
+  # returns the html page of the game
+  #
   def self.parse_game_page(product_url)
       result = RestClient.get(product_url)
       return Nokogiri::HTML(result)
     
   end
 
+  ##
+  # Used to get description of the game from html text
+  # Takes in the html string that contains the description of the game
+  # returns the description of the game
+  #
   def self.parse_description(product_html)
       page_s = product_html.to_s
       start_index = page_s.index('<div class="productDescriptionWrapper">');
@@ -159,6 +218,13 @@ module AmazonHelper
       end
   end
 
+  ##
+  # Given a url to a page for a product on the Amazon store, 
+  # pull out all the information about the game, then determine if the same game exists in the database,
+  # or a different edition/package of that game exists in the database. 
+  # If it does, just place the sales data into the database,
+  # If it doesn't, move on and ignore the game
+  #
   def self.parse_products_off_result_page(result)
     rows = result.css(".result.product")
     rows.each do |row|
@@ -171,15 +237,8 @@ module AmazonHelper
       game = GameSearchHelper.find_right_game(search_title, "you will find no match")
       product_url = parse_url(row)
       if game == nil
-<<<<<<< HEAD
 	next
-=======
-
-        next
-
->>>>>>> 9f6087f3eff86f6c510c237bbac9b19f1e0e2142
       else
-
         if GameSearchHelper.are_games_same(search_title, game.search_title, 
                                           "you will find no match", game.description)
           puts "Match found!"
@@ -203,8 +262,6 @@ module AmazonHelper
         end
       end
 
-
-
       if !get_avaibility(row)
         next
       end
@@ -212,10 +269,7 @@ module AmazonHelper
       prices = parse_price_chunk(row)
       sale_price = prices[0]
       original_price = prices[1]
-<<<<<<< HEAD
 
-=======
->>>>>>> 9f6087f3eff86f6c510c237bbac9b19f1e0e2142
       original_price = '%.2f' %  original_price.delete( "$" ).to_f
       sale_price = '%.2f' %  sale_price.delete( "$" ).to_f
       puts product_url
@@ -240,7 +294,11 @@ module AmazonHelper
     end
   end
 
+  ##
+  # parses all the games on the amazon site and place in database
+  #
   def self.parse_amazon_site
+
     AmazonHelper.parse_first_sale_page
 
     amazon_store_base_url = 'http://www.amazon.com/s?ie=UTF8&page=2&rh=n%3A2445220011'
@@ -250,8 +308,6 @@ module AmazonHelper
     next_url = amazon_store_base_url
 
     result = RestClient.get(next_url)
-
-
 
     while result != nil
       result = Nokogiri::HTML(result)

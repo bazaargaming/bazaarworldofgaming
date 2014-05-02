@@ -4,17 +4,30 @@ require 'timeout'
 require 'restclient'
 
 
-
+##
+# This helper module contains functions for parsing games off of 
+# Green Man Gaming's website. 
+#
 module GmgHelper
 
-  def self.getTitle(sale_page)
+  ##
+  # Used to get title of game from the sale page
+  # Takes in the html string that contains the game page
+  # obtains the title of the game returns it
+  #
+  def self.get_title(sale_page)
     game_title = sale_page.css('h1.prod_det')
     game_title = /.*<h1 class="prod_det">(.*)<\/h1>.*/.match(game_title.to_s)
     game_title = game_title[1]
     game_title = game_title.gsub('(NA)', '')
   end
 
-  def self.getDescription(sale_page)
+  ##
+  # Used to get description of game from the sale page
+  # Takes in the html string that contains the game page
+  # obtains the description of the game returns it
+  #
+  def self.get_description(sale_page)
     description_paragraphs = sale_page.css("section.description p")
     description = ""
     description_paragraphs.each do |paragraph|
@@ -31,7 +44,13 @@ module GmgHelper
     return description
   end
 
-  def self.getPrices(sale_page)
+  ##
+  # Used to get the prices of game from the sale page
+  # Takes in the html string that contains the game page
+  # obtains the original and current price of the game returns it
+  # returns nil if there is no price
+  #
+  def self.get_prices(sale_page)
     current_price = sale_page.css("strong.curPrice")
     current_price = /.*<strong class="curPrice">(.*)<\/strong>.*/.match(current_price.to_s)
 
@@ -59,8 +78,12 @@ module GmgHelper
     return arr
   end
 
-
-  def self.getGenres(sale_page)
+  ##
+  # Used to get genres of game from the sale page
+  # Takes in the html string that contains the game page
+  # obtains a list of genres of the game returns it
+  #
+  def self.get_genres(sale_page)
     game_info = sale_page.css("div.game_details")
     game_info_string = game_info.to_s
 
@@ -86,7 +109,12 @@ module GmgHelper
     
   end
 
-  def self.getBoxArt(sale_page)
+  ##
+  # Used to get box art of game from the sale page
+  # Takes in the html string that contains the game page
+  # obtains the box art url of the game returns it
+  #
+  def self.get_box_art(sale_page)
 
     page_string = sale_page.to_s
     start_index =  page_string.index('<meta property="og:image" content="')
@@ -99,7 +127,12 @@ module GmgHelper
 
   end
 
-  def self.getPublisher(sale_page)
+  ##
+  # Used to get publisher of game from the sale page
+  # Takes in the html string that contains the game page
+  # obtains the publisher of the game returns it
+  #
+  def self.get_publisher(sale_page)
     game_info = sale_page.css("div.game_details")
     game_info_string = game_info.to_s
 
@@ -115,7 +148,12 @@ module GmgHelper
     return publisher
   end
 
-  def self.getDeveloper(sale_page)
+  ##
+  # Used to get developer of game from the sale page
+  # Takes in the html string that contains the game page
+  # obtains the developer of the game returns it
+  #
+  def self.get_developer(sale_page)
     game_info = sale_page.css("div.game_details")
     game_info_string = game_info.to_s
     developer_chunk_start = game_info_string.index("<td>Developer:</td>")
@@ -128,7 +166,12 @@ module GmgHelper
     return developer
   end
 
-  def self.getReleaseDate(sale_page)
+  ##
+  # Used to get release date of game from the sale page
+  # Takes in the html string that contains the game page
+  # obtains the release date of the game returns it
+  #
+  def self.get_release_date(sale_page)
     game_info = sale_page.css("div.game_details")
     game_info_string = game_info.to_s
     released_chunk_start = game_info_string.index("<td>Released:</td>")
@@ -142,7 +185,12 @@ module GmgHelper
     return released
   end
 
-  def self.storeSalesData(normal_price, current_price, game, sale_link)
+  ##
+  # Used to store the sales data into the database
+  # Takes in the original price, the current sale price,
+  # the game, and the link of the sale
+  #
+  def self.store_sales_data(normal_price, current_price, game, sale_link)
     original_price = '%.2f' %  normal_price.delete( "$" ).to_f
     sale_price = '%.2f' %  current_price.delete( "$" ).to_f
 
@@ -166,16 +214,23 @@ module GmgHelper
     end
   end
 
-  def self.getSalePageInfo(sale_link)
+  ##
+  # Given a url to a page for a product on the GMG store, 
+  # pull out all the information about the game, then determine if the same game exists in the database,
+  # or a different edition/package of that game exists in the database. 
+  # If it does, just place the sales data into the database,
+  # If it doesn't, make a new game and store both the game and sales history to the database
+  #
+  def self.get_sale_page_info(sale_link)
 
     sale_page = Nokogiri::HTML(open(sale_link))
 
     #obtain the game title
-    game_title = GmgHelper.getTitle(sale_page)
+    game_title = GmgHelper.get_title(sale_page)
     #obtain description
-    description = GmgHelper.getDescription(sale_page)
+    description = GmgHelper.get_description(sale_page)
     #obtain normal price, current price
-    price_arr = GmgHelper.getPrices(sale_page)
+    price_arr = GmgHelper.get_prices(sale_page)
     if price_arr == nil
       return 
     end
@@ -184,19 +239,19 @@ module GmgHelper
     current_price = price_arr.last
 
     #extract genres
-    genres = GmgHelper.getGenres(sale_page)
+    genres = GmgHelper.get_genres(sale_page)
 
     #publisher
-    publisher = GmgHelper.getPublisher(sale_page)
+    publisher = GmgHelper.get_publisher(sale_page)
 
     #developer
-    developer = GmgHelper.getDeveloper(sale_page)
+    developer = GmgHelper.get_developer(sale_page)
 
     #obtain release date
-    release_date = GmgHelper.getReleaseDate(sale_page)
+    release_date = GmgHelper.get_release_date(sale_page)
 
     #box art
-    box_art_url = GmgHelper.getBoxArt(sale_page)
+    box_art_url = GmgHelper.get_box_art(sale_page)
 
     game = GameSearchHelper.find_right_game(game_title, description)
     search_title = StringHelper.create_search_title(game_title)
@@ -234,11 +289,13 @@ module GmgHelper
     puts(game.title)
     puts(game.search_title)
 
-    GmgHelper.storeSalesData(normal_price, current_price, game, sale_link)
+    GmgHelper.store_sales_data(normal_price, current_price, game, sale_link)
   end
 
-
-  def self.goThroughEntireGenre(genre, num_pages)
+  ##
+  # parses all the games for a specific genre on the GMG site and place in database
+  #
+  def self.go_through_entire_genre(genre, num_pages)
     root_url = "http://www.greenmangaming.com/genres/" + genre
 
     current_page = 1;
@@ -257,19 +314,21 @@ module GmgHelper
 
       product_list_links.each do |href|
         sale_link = 'http://www.greenmangaming.com' + href
-        GmgHelper.getSalePageInfo(sale_link)
+        GmgHelper.get_sale_page_info(sale_link)
       end
     end
   end
 
-
+  ##
+  # parses all the games on the GMG site and place in database
+  #
   def self.parse_gmg_site
     genres = [["action",85],["shooter",16],["strategy",59],["adventure",19],["racing",14],
            ["simulation",31],["sports",5],["rpgs",20],["educational",1],["family",1],
            ["mmos",4],["puzzle",15],["indie",63]]
     genres.each do |(a,b)|
         puts "#{a} #{b}"
-        GmgHelper.goThroughEntireGenre(a,b)
+        GmgHelper.go_through_entire_genre(a,b)
     end
   end
 
