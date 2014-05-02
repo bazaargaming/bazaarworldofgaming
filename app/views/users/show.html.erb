@@ -58,54 +58,58 @@
         <% end %>
     </div>
 
-<div class="container">
-<h5> Your Price Alerts </h5>
-<% if current_user.alerts.size == 0 %>
-    <p> You have not added any price alerts</p>
-<% end %>
-<% current_user.alerts.each_with_index do |alert, i| %>
-    <% alert_game = Game.find(alert.game_id) %>
-    <div class="SearchResult row">
-            <div class="span1 boxArt">
-                <img src="<%= alert_game.image_url%>"> </img>
+    <div class="container">
+        <h5> Your Price Alerts </h5>
+
+        <% if current_user.alerts.size == 0 %>
+            <p> You have not added any price alerts</p>
+        <% end %>
+
+        <% current_user.alerts.each_with_index do |alert, i| %>
+            <% alert_game = Game.find(alert.game_id) %>
+            
+            <div class="SearchResult row">
+                <div class="span1 boxArt">
+                    <img src="<%= alert_game.image_url%>"> </img>
+                </div>
+
+                <div class = "span8 display">
+                    <div class = "row">
+                        <div class = "span7 gameTitle">
+                            <h4>
+                                <%= link_to alert_game.title, :controller => "game", :action => "show", :id => alert_game.id %>
+                            </h4>
+                        </div>
+                        <div class = "pull-right releaseDate">
+                            <span class="label label-default"><%= alert_game.release_date%></span>
+                        </div>
+                    </div>
+                    <div class = "description" id = "dot1">
+                        <%= alert_game.description%>
+                    </div>
+                    <div class = "labels">
+                        <div class="pull-left">
+
+                            <span class="label label-info"> Theshold = <%= alert.threshold %></span>
+                            
+                        </div>  
+                        <div class="pull-right">
+                            <% alert_game.genres.each do |genre| %>
+                                <span class="label label-info"><%= genre %></span>
+                            <% end %>
+                        </div>         
+                    </div>
+                    <br />
+                    <% if signed_in? %>
+                        <button data-toggle = "modal" data-target = "#editModal"> Edit </button>
+
+                        <%= button_to "Delete", alert_path(alert), :method => :delete, :confirm => "Are you Sure?" %>
+
+                    <% end %>
+                    <% @alert = alert %>
+                    <%= render 'shared/editModal'%>
+                </div>
             </div>
-
-            <div class = "span8 display">
-                <div class = "row">
-                    <div class = "span7 gameTitle">
-                        <h4>
-                            <%= link_to alert_game.title, :controller => "game", :action => "show", :id => alert_game.id %>
-                        </h4>
-                    </div>
-                    <div class = "pull-right releaseDate">
-                        <span class="label label-default"><%= alert_game.release_date%></span>
-                    </div>
-                </div>
-                <div class = "description" id = "dot1">
-                    <%= alert_game.description%>
-                </div>
-                <div class = "labels">
-                    <div class="pull-left">
-
-                        <span class="label label-info"> Theshold = <%= alert.threshold %></span>
-                        
-                    </div>  
-                    <div class="pull-right">
-                        <% alert_game.genres.each do |genre| %>
-                            <span class="label label-info"><%= genre %></span>
-                        <% end %>
-                    </div>         
-                </div>
-                <br />
-                <% if signed_in? %>
-                    <button data-toggle = "modal" data-target = "#editModal"> Edit </button>
-
-                    <%= button_to "Delete", alert_path(alert), :method => :delete, :confirm => "Are you Sure?" %>
-
-                <% end %>
-                <% @alert = alert %>
-                <%= render 'shared/editModal'%>
+        <% end %>
     </div>
-<% end %>
-</div>
 </div>

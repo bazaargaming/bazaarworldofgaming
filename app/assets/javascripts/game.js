@@ -21,6 +21,10 @@
                 var gmgarr = data.filter(function(item){
                     return (item.store === "GMG");
                 });
+
+                var gmrgatearr = data.filter(function(item){
+                    return (item.store == "GamersGate");
+                });
                 var unique = {};
                 var distinctDates = new Array();
                 
@@ -175,6 +179,52 @@
                     else{
                         prevPrice = cheapest;
                         graphhtml += "<td>" + gmgarr[cheapest].price + "</td>";
+                    }
+                    cheapest = -1;
+                    cheapestPrice = -1;
+                });
+                graphhtml += "</tr><tr><th>GamersGate</th>";
+                
+
+                prevPrice = 0;
+                gmrgatearr.reverse();
+                $.each(distinctDates, function(index, item){
+                    
+                    for(i = 0; i < gmrgatearr.length; i++){
+                        var datetime = new Date(gmrgatearr[i].occurred);
+                        var date = (datetime.getMonth()+1) + "/" + datetime.getDate() + "/" + datetime.getFullYear();
+                        if(date == item){
+                            console.log(date);
+                            if(cheapestPrice == -1){
+                                cheapest = i;
+                                cheapestPrice =  gmrgatearr[i].price;
+                            }
+                            else{
+                                if (cheapestPrice > gmrgatearr[i].price) {
+                                    cheapest = i;
+                                    cheapestPrice = gmrgatearr[i].price;
+                                }
+                            }
+                        }
+                        
+
+                    }
+                    
+                    if(cheapestPrice == -1){
+                        
+                        if(index == 0){
+                            graphhtml += "<td>0</td>";
+
+                        }
+
+                        else{
+                            console.log(gmrgatearr[0]);
+                            graphhtml += "<td>" + gmrgatearr[prevPrice].price + "</td>"
+                        }
+                    }
+                    else{
+                        prevPrice = cheapest;
+                        graphhtml += "<td>" + gmrgatearr[cheapest].price + "</td>";
                     }
                     cheapest = -1;
                     cheapestPrice = -1;

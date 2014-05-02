@@ -8,13 +8,13 @@
         		  <img style = "height:auto; width:auto; max-width:300px; max-height:300px" src='<%= @game.image_url %>' class = "img-rounded"> <br />
                 <% if signed_in? %>
                     <div id = "addgame">
-                        <%= button_to "Add Game to Profile", {action: "add", gameid: @currentID}, form_class: "top" %>
+                        <%= button_to "Add Game to Profile", {action: "add", gameid: @current_ID}, form_class: "top" %>
                     </div> 
                 <% end %>    
         	   </div>
             </td><td class="span2 well">
         	<div id ="info">
-        		<!--:genres,  -->
+        		
         		<p> Genre:
                     <% if @game.genres.empty? %>
                        n/a

@@ -2,10 +2,13 @@
 include GameSearchHelper 
 include GameHelper
 
+#Controls all actions that refer to games.
 class GameController < ApplicationController
   
+  #Action called when searching for a game
+  #Paginates a list of search results for the HTML file.
   def search
-  	#@results = Game.find_by_title(params[:stuff])
+  	
      @results = nil
 
      if signed_in? && current_user.filter
@@ -30,10 +33,10 @@ class GameController < ApplicationController
      @results = @results.paginate(page: params[:page], per_page: params[:per])
   end
 
-
+  #Action to show a game's profile to the user.
   def show
-    @currentID = params[:id]
-  	@game = Game.find(@currentID)
+    @current_ID = params[:id]
+  	@game = Game.find(@current_ID)
     @user = current_user
     @best = GameHelper.best_price(@game)
     @alert = nil
@@ -43,6 +46,7 @@ class GameController < ApplicationController
     @lowest = @game.game_sale_histories.order(price: :asc).first
   end
 
+  #Add a game to the database.
   def add
   	@blah = Game.find(params[:gameid])
   	if current_user != nil

@@ -2,6 +2,8 @@ require 'json'
 
 module PriceHistoryHelper
 
+	#Get sales histories for a game
+	#Called when user clicks to display the Price history.
 	def get_sales_histories(game)
 		cleaninghash = {"Amazon"=> {},"Steam"=> {},"GMG"=> {},"GamersGate"=>{}}
 		histories = game.game_sale_histories.order('occurred desc')

@@ -1,26 +1,7 @@
 <div class="Container">
 	<div class="row">
-		<!--
-		<div class="SearchBarContainer">
-			<form action="#" method="get">
-				<div class="input-group">
-					<form class="well form-search">
-						<div class="span8">
-							<input type="text" class="span8 search-query">
-						</div>
-						<div class="span4">
-							<button type="submit" class="btn"><i class="icon-search"></i> Search</button>
-						</div>
-					</form>
-				</div>
-			</form>
-		</div> -->
 
 		<%= render 'game/searchBox' %>
-
-		
-
-
 
 		<div class="SearchResultContainer">
 		<div class="SearchTitle">
@@ -36,55 +17,52 @@
 		<% @results.each do | result | %>
 			<% best = GameHelper.best_price(result) %>
 			<div class="SearchResult row">
-			<div class="span1 boxArt">
-				<img src="<%= result.image_url%>"> </img>
-			</div>
-
-			<div class = "span8 display">
-				<div class = "row">
-					<div class = "span7 gameTitle">
-						<h4><a href="<%= result.id %>"><%= result.title%></a> <%if best != nil%>- <%= number_to_currency(best.saleamt)%><%end%></h4>
-					</div>
-					<div class = "pull-right releaseDate">
-						<span class="label label-default"><%= result.release_date%></span>
-					</div>
-					<div class = "pull-right metaScore">
-						<span class="label label-default">
-							<%if (result.metacritic_rating == "0")%> 
-								<%="n/a"%> 
-							<%else%> 
-								<%=result.metacritic_rating%> 
-							<%end%>
-						</span>
-					</div>
-				</div>
-				<div class = "description" id = "dot1">
-
-
-
-					<% if (result.description != nil and result.description.include?("Requires the base game")) %>
-				        <%= "This product is DLC." %>
-				    <%else%>
-				      <%= result.description%>
-				    <%end%>
-
-
-				</div>
-				<div class = "labels">
-				<div class="pull-right">
-					<% result.genres.each do |genre| %>
-						<span class="label label-info"><%= genre %></span>
-        				<% end %>
-				</div>         
+				<div class="span1 boxArt">
+					<img src="<%= result.image_url%>"> </img>
 				</div>
 
-			</div>
+				<div class = "span8 display">
+					<div class = "row">
+						<div class = "span7 gameTitle">
+							<h4><a href="<%= result.id %>"><%= result.title%></a> <%if best != nil%>- <%= number_to_currency(best.saleamt)%><%end%></h4>
+						</div>
+						<div class = "pull-right releaseDate">
+							<span class="label label-default"><%= result.release_date%></span>
+						</div>
+						<div class = "pull-right metaScore">
+							<span class="label label-default">
+								<%if (result.metacritic_rating == "0")%> 
+									<%="n/a"%> 
+								<%else%> 
+									<%=result.metacritic_rating%> 
+								<%end%>
+							</span>
+						</div>
+					</div>
+					<div class = "description" id = "dot1">
+
+						<% if (result.description != nil and result.description.include?("Requires the base game")) %>
+					        <%= "This product is DLC." %>
+					    <%else%>
+					      <%= result.description%>
+					    <%end%>
+
+					</div>
+					<div class = "labels">
+						<div class="pull-right">
+							<% result.genres.each do |genre| %>
+								<span class="label label-info"><%= genre %></span>
+		        				<% end %>
+						</div>         
+					</div>
+
+				</div>
 			</div>
 
 			<hr>	
-		<% end %>
-		
-		<%= will_paginate @results %>
-	</div>
+			<% end %>
+				
+			<%= will_paginate @results %>
+		</div>
 	</div>
 </div>

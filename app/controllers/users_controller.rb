@@ -1,10 +1,13 @@
 class UsersController < ApplicationController
   before_action :signed_in_user, only: [:edit, :update, :destroy]
   before_action :correct_user,   only: [:edit, :update, :destroy]
+
+  #Create a blank user
   def new
     @user = User.new
   end
 
+  #Create a user given parameters
   def create
     @user = User.new(user_params)
     if @user.save
@@ -16,12 +19,15 @@ class UsersController < ApplicationController
     end
   end
 
+  #Show a users profile page. Routes to HTML file
   def show
   end
 
+  #Edit a user in the database. Routes to an HTML file
   def edit
   end
 
+  #Update a user given parameters.
   def update
     if @user.update_attributes(user_params)
       flash[:success] = "Profile updated"
@@ -31,6 +37,7 @@ class UsersController < ApplicationController
     end
   end
 
+  #Delete a user.
   def destroy
     User.find(params[:id]).destroy
     flash[:success] = "User deleted."
