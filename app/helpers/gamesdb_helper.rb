@@ -2,6 +2,10 @@ require 'nokogiri'
 require 'open-uri'
 require 'timeout'
 
+##
+# This helper module parses games off of the website called TheGamesDB.net
+#
+
 module GamesdbHelper
 	GAME_REQUEST_BASE_URL = 'http://thegamesdb.net/api/GetGame.php?id=' 
 	GAME_BASE_IMAGE_URL = "http://thegamesdb.net/banners/"
@@ -9,6 +13,9 @@ module GamesdbHelper
 	CONSOLE_TO_METACRITIC_MAP = Hash.new("fubar")
 	CONSOLE_TO_METACRITIC_MAP["PC"] = "pc"
 
+	##
+  	# Used to obtain a list of genres of a game
+  	#
 	def self.get_game_genre(url)
 		request = Nokogiri::XML(open(url))
 
@@ -21,6 +28,9 @@ module GamesdbHelper
 		return genres
 	end
 
+	##
+  	# Used to determine if a given game already exists in the DB
+  	#
 	def self.game_exists_in_db?(title, platform)
 		puts "Checking DB..."
 		test = Game.where("title = ?", title).first
@@ -31,7 +41,11 @@ module GamesdbHelper
 		return false
 	end
 
-	def self.fetch_game_info(gameid,client)
+	##
+  	# Used to fetch game information from the parameter client, 
+  	# store the information as a list, and return the list
+  	#
+	def self.fetch_game_info(gameid, client)
  		result = {}
 		game = client.get_game(gameid)["Game"]
 
@@ -59,7 +73,9 @@ module GamesdbHelper
 		return result
 	end
 
-
+	##
+  	# Used to convert a given title to the corresponding title in metacritic website
+  	#
 	def self.title_to_metacritic_title(title)
 		metacritic_title = (title.downcase)
 		metacritic_title.gsub!("---", '-')
@@ -71,7 +87,10 @@ module GamesdbHelper
 		return metacritic_title
 	end
 
-  	def self.build_metacritic_url(title,platform="PC")
+	##
+  	# Given a title and a platform, this function is used to build a proper metacritic url
+  	#
+  	def self.build_metacritic_url(title, platform="PC")
 		metacritic_title = title_to_metacritic_title(title)
 
 		console_metacritic = CONSOLE_TO_METACRITIC_MAP[platform]
@@ -100,6 +119,10 @@ module GamesdbHelper
 		return metacritic_url
 	end
   
+  	##
+  	# Used to retrieve metacritic score of a game, given the url of the game
+  	# if the game has a metacritic score, this function returns the score,
+  	# otherwise, it returns 0
   	def self.retrieve_metacritic_score(url)
     	begin
 			result = Nokogiri::HTML(open(url))
