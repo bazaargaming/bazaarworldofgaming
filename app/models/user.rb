@@ -1,3 +1,5 @@
+#The user model is what allows a user to have a profile
+#each user has a unique representation as a user model.
 class User < ActiveRecord::Base
 	before_save { self.email = email.downcase}
 	before_create :create_remember_token
@@ -16,6 +18,7 @@ class User < ActiveRecord::Base
 	has_secure_password
 	validates :password, length: { minimum: 6 }
 	
+	##This stuff keeps you signed in
 	def User.new_remember_token
 		SecureRandom.urlsafe_base64
 	end

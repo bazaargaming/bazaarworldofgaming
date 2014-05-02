@@ -6,7 +6,7 @@ You should use rvm to install ruby 2.0.0
 
 ##Getting Rails Installed
 
-This is the hardest part of getting your development environment set up. The best resource for this is probably the installation guide on [The Rails Tutorial]().
+This is the hardest part of getting your development environment set up. The best resource for this is probably the installation guide on [The Rails Tutorial](http://www.railstutorial.org/book/beginning#sec-development_tools).
 
 ##Running the app
 
