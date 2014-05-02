@@ -1,28 +1,28 @@
 <div class="new_container">
-<div class="row">
-  <h1 class="span6 offset3">Sign up</h1>
-  <div class="span9 offset3">
-    <%= form_for(@user, url: users_path(@user)) do |f| %>
-      <%= render 'shared/error_messages' %>
+  <div class="row">
+    <h1 class="span6 offset3">Sign up</h1>
+    <div class="span9 offset3">
+      <%= form_for(@user, url: users_path(@user)) do |f| %>
+        <%= render 'shared/error_messages' %>
 
-      <%= f.label :name %>
-      <%= f.text_field :name %>
+        <%= f.label :name %>
+        <%= f.text_field :name %>
 
-      <%= f.label :email %>
-      <%= f.text_field :email %>
+        <%= f.label :email %>
+        <%= f.text_field :email %>
 
-      <%= f.label :username %>
-      <%= f.text_field :username %>
+        <%= f.label :username %>
+        <%= f.text_field :username %>
 
-      <%= f.label :password %>
-      <%= f.password_field :password %>
+        <%= f.label :password %>
+        <%= f.password_field :password %>
 
-      <%= f.label :password_confirmation, "Confirmation" %>
-      <%= f.password_field :password_confirmation %>												
-      
-      <div><%= f.submit "Create my account", class: "btn btn-large btn-primary" %></div>
+        <%= f.label :password_confirmation, "Confirmation" %>
+        <%= f.password_field :password_confirmation %>												
+        
+        <div><%= f.submit "Create my account", class: "btn btn-large btn-primary" %></div>
 
-    <% end %>
+      <% end %>
+    </div>
   </div>
-</div>
 </div>

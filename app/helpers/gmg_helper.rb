@@ -263,7 +263,7 @@ module GmgHelper
   end
 
 
-  def self.parseGmgSite
+  def self.parse_gmg_site
     genres = [["action",85],["shooter",16],["strategy",59],["adventure",19],["racing",14],
            ["simulation",31],["sports",5],["rpgs",20],["educational",1],["family",1],
            ["mmos",4],["puzzle",15],["indie",63]]

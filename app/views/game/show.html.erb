@@ -8,13 +8,13 @@
         		  <img style = "height:auto; width:auto; max-width:300px; max-height:300px" src='<%= @game.image_url %>' class = "img-rounded"> <br />
                 <% if signed_in? %>
                     <div id = "addgame">
-                        <%= button_to "Add Game to Profile", {action: "add", gameid: @currentID}, form_class: "top" %>
+                        <%= button_to "Add Game to Profile", {action: "add", gameid: @current_ID}, form_class: "top" %>
                     </div> 
                 <% end %>    
         	   </div>
             </td><td class="span2 well">
         	<div id ="info">
-        		<!--:genres,  -->
+        		
         		<p> Genre:
                     <% if @game.genres.empty? %>
                        n/a
@@ -95,8 +95,8 @@
 	    	  Price History
 	           </button>
                 <div id="historydiv" class="span3 offset3"></div>
-                <div id="historygraph" class="span6"></div>
-                <div id="historytable" class="span3 scrollable" style="overflow-y: auto; overflow-x: hidden;height: 400px"></div>
+                <div id="historygraph" class="span5"></div>
+                <div id="historytable" class="span4 scrollable" style="overflow: auto;height: 400px"></div>
             </div>
         </div>
     </div>
@@ -132,30 +132,7 @@
         </div>
     </div>
     <%else%>
-    <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                     <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                <h4 class="modal-title" id="myModalLabel">Edit Threshold</h4>
-                             </div>
-                            <div class="modal-body">
-                                <%if @alert %>
-                                    <%= form_for(@alert)  do |alrt| %>
-                                        <%= alrt.label :threshold %>
-                                        $<%= alrt.number_field :threshold, class: "form-control", :step => "0.01"  %>
-                                        <%= alrt.submit "Change Threshold", class: "btn btn-primary " %>
-                                    <% end %>
-                                <%else%>
-                                    <p>There is no alert to edit</p>
-                                <%end%>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+    <%= render 'shared/editModal'%>
 <%end%>
 
 </div>

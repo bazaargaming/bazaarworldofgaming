@@ -128,27 +128,44 @@ module GamersGateHelper
    			search_title = StringHelper.create_search_title(title)
 			
 			if game == nil
-				if game_src == nil
-					game_src = RestClient.get(game_url)
-					game_doc = Nokogiri::HTML(game_src)
-				end
-				publisher = parse_publisher(game_doc)
-				genres = parse_genres(game_doc)
-				developer = parse_developer(game_doc)
-				description = parse_description(game_doc)
-				boxart = parse_boxart(game_doc)
-				mcurl = GamesdbHelper.build_metacritic_url(title)
-				metacritic_rating = GamesdbHelper.retrieve_metacritic_score(mcurl)
-				puts "Making new game: " + title
-				game = Game.create!(title: title,  description: description,  publisher: publisher, 
-						    developer: developer, genres: genres, metacritic_rating: metacritic_rating,
-           					    image_url: boxart, search_title: search_title)
+				# if game_src == nil
+				# 	game_src = RestClient.get(game_url)
+				# 	game_doc = Nokogiri::HTML(game_src)
+				# end
+				# publisher = parse_publisher(game_doc)
+				# genres = parse_genres(game_doc)
+				# developer = parse_developer(game_doc)
+				# description = parse_description(game_doc)
+				# boxart = parse_boxart(game_doc)
+				# mcurl = GamesdbHelper.build_metacritic_url(title)
+				# metacritic_rating = GamesdbHelper.retrieve_metacritic_score(mcurl)
+				# puts "Making new game: " + title
+				# game = Game.create!(title: title,  description: description,  publisher: publisher, 
+				# 		    developer: developer, genres: genres, metacritic_rating: metacritic_rating,
+    #        					    image_url: boxart, search_title: search_title)
 			else
-				
+
+				if GameSearchHelper.are_games_same(search_title, game.search_title, "you will find no match", game.description)
+		          puts "Match found!"
+		          puts search_title
+		          puts game.search_title
+		        else
+		          puts "Need to make a new game based off of the found one's info"
+
+		          freshgame = Game.create!(title: title, release_date: game.release_date, description: game.description, publisher: game.publisher, 
+		            developer: game.developer, genres: game.genres, search_title: search_title, metacritic_rating: game.metacritic_rating, image_url: game.image_url)
+
+		          puts search_title
+		          puts game.search_title
+
+		          game = freshgame
+		      end
 			end
 
-			storeSalesData(orig_price, current_price, game, game_url)
-			puts "Sales data created for  " + title
+			if game != nil
+				storeSalesData(orig_price, current_price, game, game_url)
+				puts "Sales data created for  " + title
+			end
 
 		end
 
@@ -157,7 +174,7 @@ module GamersGateHelper
 
 	end
 
-	def self.parse_all_games
+	def self.parse_ggate_site
 
 		page_number = 1
 		parsing = true
@@ -170,8 +187,6 @@ module GamersGateHelper
 		end
 
 	end
-
-
 
 
 end

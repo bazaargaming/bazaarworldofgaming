@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140417223606) do
+ActiveRecord::Schema.define(version: 20140423232045) do
 
   create_table "alerts", force: true do |t|
     t.float    "threshold"
@@ -52,7 +52,7 @@ ActiveRecord::Schema.define(version: 20140417223606) do
     t.string   "title"
     t.string   "platform"
     t.date     "release_date"
-    t.string   "description"
+    t.text     "description",       limit: 255
     t.string   "players"
     t.string   "esrb_rating"
     t.string   "coop"
@@ -64,7 +64,6 @@ ActiveRecord::Schema.define(version: 20140417223606) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "search_title"
-    t.integer  "user_id"
   end
 
   create_table "users", force: true do |t|

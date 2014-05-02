@@ -14,6 +14,3 @@ Feature: Profile
 		Given a user has successfully signed into their account
 		When they add a game to their profile
 		Then they should see it on their page
-
-	
-		

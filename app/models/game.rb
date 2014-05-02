@@ -1,6 +1,6 @@
 class Game < ActiveRecord::Base
   serialize :genres, Array
-  attr_accessible :search_title, :coop, :description, :developer, :esrb_rating, :genres, :image_url, :metacritic_rating, :players, :publisher, :release_date, :title
+  attr_accessible :search_title, :coop, :description, :platform, :developer, :esrb_rating, :genres, :image_url, :metacritic_rating, :players, :publisher, :release_date, :title
   validates :title,  presence: true
   validates :search_title,  presence: true
   
@@ -8,14 +8,6 @@ class Game < ActiveRecord::Base
   has_many :game_sales, dependent: :destroy
   has_many :game_sale_histories, dependent: :destroy
   has_many :alerts, dependent: :destroy
-
-
-
-
-
-
-
-
 
 
  def get_lowest_sale_per_vendor

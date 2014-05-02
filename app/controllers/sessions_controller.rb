@@ -1,7 +1,10 @@
 class SessionsController < ApplicationController
+  #Action to start a new session.
 	def new
 	end
 
+  #Actiuon that creates a new session given a username and password.
+  #Displays messages on success and error
 	def create
 		user = User.find_by(username: params[:session][:username])
   		if user && user.authenticate(params[:session][:password])
@@ -14,6 +17,7 @@ class SessionsController < ApplicationController
   		end
 	end
 
+  #destroy the current session i.e. sign out.
 	def destroy
     sign_out
     redirect_to root_url
