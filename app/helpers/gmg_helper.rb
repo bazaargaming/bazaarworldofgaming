@@ -65,7 +65,6 @@ module GmgHelper
     game_info_string = game_info.to_s
 
     #extract genres
-
     genre_chunk_start = game_info_string.index("<td>Genres:</td>")
     genre_chunk = game_info_string[genre_chunk_start...game_info_string.length]
     genre_chunk_end = genre_chunk.index("</tr>")
@@ -198,18 +197,6 @@ module GmgHelper
 
     #box art
     box_art_url = GmgHelper.getBoxArt(sale_page)
-
-    # puts game_title
-    # puts description
-    # puts normal_price
-    # puts current_price
-    # puts genres
-    # puts publisher
-    # puts developer
-    # puts release_date
-    # puts box_art_url
-
-    puts "\n"
 
     game = GameSearchHelper.find_right_game(game_title, description)
     search_title = StringHelper.create_search_title(game_title)

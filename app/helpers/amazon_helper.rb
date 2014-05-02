@@ -5,21 +5,17 @@ require 'restclient'
 
 
 module AmazonHelper
-
+  
   def self.parse_first_sale_page
     amzn_first_page_url = "http://www.amazon.com/s?ie=UTF8&page=1&rh=n%3A2445220011"
 
-
     result = RestClient.get(amzn_first_page_url)
-
     result = Nokogiri::HTML(result)
-
 
     parse_products_off_result_page(result)
 
-
-
     File.open("db/test_files/firstpage.html", 'w') { |file| file.write(result.to_s) }
+
   end
 
   def self.parse_title(row)
@@ -171,18 +167,21 @@ module AmazonHelper
         puts "Title not found."
         next
       end
-      #seeing if we find a match
       search_title = StringHelper.create_search_title(title)
-      #game_description = parse_description(row)
       game = GameSearchHelper.find_right_game(search_title, "you will find no match")
       product_url = parse_url(row)
       if game == nil
+<<<<<<< HEAD
+	next
+=======
 
         next
 
+>>>>>>> 9f6087f3eff86f6c510c237bbac9b19f1e0e2142
       else
 
-        if GameSearchHelper.are_games_same(search_title, game.search_title, "you will find no match", game.description)
+        if GameSearchHelper.are_games_same(search_title, game.search_title, 
+                                          "you will find no match", game.description)
           puts "Match found!"
           puts search_title
           puts game.search_title
@@ -190,19 +189,18 @@ module AmazonHelper
           puts "Need to make a new game based off of the found one's info"
           game_page_result = parse_game_page(product_url)
           box_art_url = parse_box_art(game_page_result)
-          freshgame = Game.create!(title: title, release_date: game.release_date, description: game.description, publisher: game.publisher, 
-            developer: game.developer, genres: game.genres, search_title: search_title, metacritic_rating: game.metacritic_rating, image_url: box_art_url)
+          freshgame = Game.create!(title: title, release_date: game.release_date, 
+                                   description: game.description, publisher: game.publisher, 
+                                   developer: game.developer, genres: game.genres, 
+                                   search_title: search_title, 
+                                   metacritic_rating: game.metacritic_rating, 
+                                   image_url: box_art_url)
 
           puts search_title
           puts game.search_title
 
           game = freshgame
-
         end
-
-
-
-
       end
 
 
@@ -211,16 +209,16 @@ module AmazonHelper
         next
       end
 
-
       prices = parse_price_chunk(row)
       sale_price = prices[0]
       original_price = prices[1]
+<<<<<<< HEAD
+
+=======
+>>>>>>> 9f6087f3eff86f6c510c237bbac9b19f1e0e2142
       original_price = '%.2f' %  original_price.delete( "$" ).to_f
       sale_price = '%.2f' %  sale_price.delete( "$" ).to_f
       puts product_url
-
-
-
 
         amazon_sales = game.game_sales.where(["store = ?", "Amazon"])
 
