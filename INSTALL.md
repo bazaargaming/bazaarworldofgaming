@@ -23,13 +23,11 @@ Thats it, you can now navigate to http://localhost:3000 and navigate the app
 
 ###Seeding/Adding Sales Data
 
-1. Copy the contents of [grab_vendor_data](db/grab_vendor_data.rb) into the seeds.rb file.
-2. Run `bundle exec rake db:seed`
+1. Run `rails runner DailyParseHelper.parse_all`
 
 ###Seeding/Adding Games Data
 
-1. Copy the contents of [game_and_metacritic_parser](db/game_and_metacritic_parser.rb) into seeds.rb
-2. Run `bundle exec rake db:seed`
+1. Run `bundle exec rake db:seed`
 
 ##Development Stuff
 If you ever change the schema of the database you will need run `bundle exec rake db:migrate`
