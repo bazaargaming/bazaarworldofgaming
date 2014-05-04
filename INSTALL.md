@@ -10,7 +10,7 @@ This is the hardest part of getting your development environment set up. The bes
 
 ##Running the app
 
-Since the github has an up to date database so you will not need to seed the games data. Instructions on setting up a fresh db will be at the bottom of this document. 
+Since the github has a populated games database, you will not need to worry about seeding the site with games. Pre-existing sales data is also included, but it may be out of date by the time you read this. If you wish to have up to date sales data and/or add new game releases to the games database, please refer to the Adding Data section. Instructions on setting up a fresh db will be at the bottom of this document. 
 
 Running the app is fairly simple.
 
