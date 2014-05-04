@@ -19,13 +19,13 @@ Running the app is fairly simple.
 
 Thats it, you can now navigate to http://localhost:3000 and navigate the app
 
-##Seeding Data
+##Adding Data
 
-###Seeding/Adding Sales Data
+###Adding Sales Data
 
 1. Run `rails runner DailyParseHelper.parse_all`. You should probably do this in a separate terminal window as this is a long-running process. 
 
-###Seeding/Adding Games Data
+###Adding Games Data
 
 1. Run `bundle exec rake db:seed`. You should probably do this in a separate terminal window as this is a long-running process. 
 
