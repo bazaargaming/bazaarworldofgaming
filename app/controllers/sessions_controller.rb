@@ -3,12 +3,12 @@ class SessionsController < ApplicationController
 	def new
 	end
 
-  #Actiuon that creates a new session given a username and password.
+  #Action that creates a new session given a username and password.
   #Displays messages on success and error
 	def create
 		user = User.find_by(username: params[:session][:username])
   		if user && user.authenticate(params[:session][:password])
-    		sign_in user
+    		sign_in user #Helper function that creates a cookie for the session
     		flash.now[:success] = 'Login Successful'
     		redirect_to root_path
   		else

@@ -10,6 +10,9 @@ require 'restclient'
 #
 module GameSearchHelper
 
+  # List of genres used to populate drop-down list in search box
+  # The first of each pair is the string that is shown in the list
+  # The second is the value that corresponds with it.
   def self.genre_list
     [["Select one...",nil],
      ["Action","action"],["Adventure","adventure"],["Educational","Educational"],["Family","Family"],["Fighting","Fighting"],
@@ -18,10 +21,12 @@ module GameSearchHelper
      ["Simulation","simulation"],["Sports","sports"],["Stealth","stealth"],["Strategy","strategy"]]
   end
 
+  # List used to populate the # of items listed drop-down list in search box
   def self.page_options
     [["10",10],["15",15],["20", 20],["25",25]]
   end
 
+  # Map used in resolving mismatches in genre names between different vendors
   def self.genre_map
    [["shooter"],["action"],["adventure"],["sandbox"],["racing"],["horror"],["MMO", "MMOs"],["Role-Playing","RPGs"],
     ["strategy"],["sports"],["stealth"],
@@ -39,11 +44,13 @@ module GameSearchHelper
       ["master thief edition", "thief master thief edition"]]
   end
 
+  # This is a map used to handle roman numerals that may be replaced by their integer representation by some vendors
   def self.roman_numerals
     [["1","I"],["2","II"],["3","III"],["4","IV"],["5","V"],["6","VI"],["7","VII"],["8","VIII"],["9","IX"],["10","X"],
      ["11","XI"],["12","XII"],["13","XIII"],["14","XIV"],["15","XV"],["16","XVI"],["17","XVII"],["18","XVIII"],["19","XIX"],["20","XX"]]
   end
 
+  # Sometimes vendors replace the number with the word representation. This map is used to resolve this.
   def self.number_words
     [["1","one"],["2","two"],["3","three"],["4","four"],["5","five"],["6","six"],["7","seven"],["8","eight"],["9","nine"],["10","ten"]]
   end
@@ -52,15 +59,24 @@ module GameSearchHelper
     ["I","X","V"]
   end
 
+  # Function that searches the database for the title entered into the search box
   def self.find_game(title)
+
+    # If the search box was left blank, return an empty list
     if(title == "")
       return []
     end
+
+    # Sanitize search title
     words_list = title.scan /[[:alnum:]]+/
     del_char(words_list)
 
     search_title = StringHelper.create_search_title(title)
+
+    # Find exact matches first
     exact_matches = Game.where("search_title LIKE ?", "%" + search_title + "%")
+
+    # THe followiing is bunch of function calls and queries used to find all the partials matches for the search title
     title_roman = handle_roman_numeral(search_title)
     roman_matches = Game.where("search_title LIKE ?", "%" + title_roman + "%")
     series_matches = []
@@ -76,7 +92,7 @@ module GameSearchHelper
   end
 
 
-
+  #Helper function to filter out games that the user has already added to profile
   def self.find_and_filter_games(title, user)
     games_list = GameSearchHelper.find_game(title)
     already_owned = user.games
@@ -84,7 +100,7 @@ module GameSearchHelper
   end
 
 
-
+  #Helper function to filter games by rating. Will return only the games whose metacritic rating is between the two set bounds.
   def self.filter_games_by_metacritic(games_list, lower_bound, upper_bound)
     filtered_results = Array.new
     games_list.each do |game|
@@ -97,16 +113,17 @@ module GameSearchHelper
     return filtered_results
   end
 
-
+  #Helper function to sort the games by metacritic rating in ascending order
   def self.sort_games_by_metacritic_asc(games_list)
     return games_list.sort{|x,y| x.metacritic_rating.to_i <=> y.metacritic_rating.to_i}
   end
 
+  #Helper functio to sort the games by metacritic rating in descending order
   def self.sort_games_by_metacritic_desc(games_list)
     return games_list.sort{|x,y| y.metacritic_rating.to_i <=> x.metacritic_rating.to_i}
   end
 
-
+  #The following two functions are used in sanitizing the search title
   def self.handle_roman_numeral(title)
     new_words_list = title.scan /[[:alnum:]]+/
     roman_numerals.each do |words|
@@ -141,6 +158,7 @@ module GameSearchHelper
 
   end
 
+  #Function that finds titles that partially match the search title
   def self.get_game_lis_partial_match(words_list)
     counts = Hash.new(0)
     words_list.each do |word|
@@ -159,6 +177,7 @@ module GameSearchHelper
     return games_list
   end
 
+  #Another title sanitizing function
   def self.handle_colon(title)
     idx = title.index(':')
     if idx == nil 
@@ -406,7 +425,7 @@ module GameSearchHelper
 
 
   
-
+  # This functions takes a genre and a list of games and returns the sublist of games that contains that genre
   def self.filter_by_genre(genre, game_list)
     results = []
     game_list.each do |game|
@@ -417,12 +436,19 @@ module GameSearchHelper
     return results
   end
 
+  # This is the wrapper function for filtering games by genre
   def self.find_games_by_genre(genre, game_list, method)
     puts genre
+
+    # If no list of games is passed in, set the game_list to be all games
     if game_list.empty?
       game_list = Game.all
     end
+
+    # Call to filter by genre
     games_found = GameSearchHelper.filter_by_genre(genre, game_list)
+
+    # More calls to filter by genre if their are genre name mismatches between vendors for that genre
     GameSearchHelper.genre_map.each do |overlap_genres|
       if overlap_genres.include?(genre)
         overlap_genres.each do |alternative_genre|
@@ -432,6 +458,8 @@ module GameSearchHelper
           end
         end
       end
+
+      # If sort by relevance is checked (method == 0), sort the games by their search titles
       if method == '0'
         games_found.sort!{|x,y| x.search_title <=> y.search_title}
       end
@@ -444,7 +472,7 @@ module GameSearchHelper
 
   end
 
-
+  # Function used to call from the console and find all mismatches in genre names
   def self.find_all_genres
     games = Game.all
     genre_list = []
@@ -459,6 +487,8 @@ module GameSearchHelper
 
     puts genre_list
   end
+
+  # Getter functions for list of genres and page options used in drop-down box
 
   def self.get_genres
     return GameSearchHelper.genre_list
