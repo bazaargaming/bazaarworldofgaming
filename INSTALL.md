@@ -37,15 +37,11 @@ Once you have rvm you need to install all the requirements for ruby, this can be
 If this doesn't work you may need to manually install some librarys. These could be 
 
 
-*libtool
-
-*libxslt
-
-*libksba
-
-*openssl
-
-*libyaml-dev
+* libtool
+* libxslt
+* libksba
+* openssl
+* libyaml-dev
 
 this step is fairly system dependent and may take some googling to find someone that may have a similar setup.
 
