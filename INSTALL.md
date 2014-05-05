@@ -71,16 +71,18 @@ Thats it, you can now navigate to http://localhost:3000 and navigate the app
 
 * Alternatively, if you want to only run the parser for a certain vendor, you can do the following:
 
-  - `GameSale.where(:store => "INSERT STORE NAME HERE").destroy_all'.
 
-  - Then, for each of the vendors, do the corresponding action:  
+  * `GameSale.where(:store => "INSERT STORE NAME HERE").destroy_all`
 
-        + Amazon: `rails runner AmazonHelper.parse_amazon_site`
-        + Steam: `rails runner SteamHelper.parse_steam_site`
-        + Green-Man-Gaming: `GmgHelper.parse_gmg_site`
-       	+ Gamers Gate: `GamersGateHelper.parse_ggate_site`
+  * Then, for each of the vendors, do the corresponding action:  
 
-  - Then, if you want to send any alerts out, run the following: 'rails runner AlertHelper.send_alerts'.
+        * Amazon: `rails runner AmazonHelper.parse_amazon_site`
+        * Steam: `rails runner SteamHelper.parse_steam_site`
+        * Green-Man-Gaming: `GmgHelper.parse_gmg_site`
+       	* Gamers Gate: `GamersGateHelper.parse_ggate_site`
+
+  * Then, if you want to send any alerts out, run the following: `rails runner AlertHelper.send_alerts`
+
 
 
 ###Adding Games Data
