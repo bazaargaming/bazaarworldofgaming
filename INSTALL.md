@@ -25,6 +25,18 @@ Thats it, you can now navigate to http://localhost:3000 and navigate the app
 
 1. Run `rails runner DailyParseHelper.parse_all`. You should probably do this in a separate terminal window as this is a long-running process. 
 
+
+Alternatively, if you want to only run the parser for a certain vendor, you can do the following:
+  1. GameSale.where(:store => "INSERT STORE NAME HERE").destroy_all
+  2. Then, for each of the vendors, do the corresponding action:
+            i. Amazon: 'rails runner AmazonHelper.parse_amazon_site'
+            ii. Steam: 'rails runner SteamHelper.parse_steam_site'
+            iii. Green-Man-Gaming: 'GmgHelper.parse_gmg_site'
+            iv. Gamers Gate: 'GamersGateHelper.parse_ggate_site'
+
+  3. Then, if you want to send any alerts out, run the following: 'rails runner AlertHelper.send_alerts'
+
+
 ###Adding Games Data
 
 1. Run `bundle exec rake db:seed`. You should probably do this in a separate terminal window as this is a long-running process. 
