@@ -28,7 +28,7 @@ Thats it, you can now navigate to http://localhost:3000 and navigate the app
 
 2. Alternatively, if you want to only run the parser for a certain vendor, you can do the following:
 
-  * GameSale.where(:store => "INSERT STORE NAME HERE").destroy_all
+  * 'GameSale.where(:store => "INSERT STORE NAME HERE").destroy_all'.
 
   * Then, for each of the vendors, do the corresponding action:  
 
