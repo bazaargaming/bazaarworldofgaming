@@ -26,7 +26,8 @@ Thats it, you can now navigate to http://localhost:3000 and navigate the app
 1. Run `rails runner DailyParseHelper.parse_all`. You should probably do this in a separate terminal window as this is a long-running process. 
 
 
-Alternatively, if you want to only run the parser for a certain vendor, you can do the following:
+2. Alternatively, if you want to only run the parser for a certain vendor, you can do the following:
+
   1. GameSale.where(:store => "INSERT STORE NAME HERE").destroy_all
   2. Then, for each of the vendors, do the corresponding action:
             i. Amazon: 'rails runner AmazonHelper.parse_amazon_site'
