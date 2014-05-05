@@ -12,14 +12,6 @@ describe GamersGateHelper do
 		expect(GamersGateHelper.parse_menu_page(url)).to eq(true)
 	end	
 
-	it "should accurately parse original price data for 'The Last Federation'" do
-		# The Last Federation on GamersGate
-		game_url = "http://www.gamersgate.com/DD-TLF/the-last-federation"
-		game_src = RestClient.get(game_url)
-		game_doc = Nokogiri::HTML(game_src)
-		expect(GamersGateHelper.parse_orig_price(game_doc)).to eq(19.99)
-	end
-
 	it "should accurately parse publisher data for 'The Last Federation'" do
 		# The Last Federation on GamersGate
 		game_url = "http://www.gamersgate.com/DD-TLF/the-last-federation"
