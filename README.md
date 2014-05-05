@@ -17,7 +17,10 @@ The contributors to this project are in no particular order
 * Arjun Garg 	     - 	garg14
 * Ben Levy 	     -	bllevy2
 * Peter Meade	     -	meade4
-* Michael Blasingame -	blasing2
+* Michael Blasingame -	blasinhg2
 * Jiwoong Youn	     - 	youn8
 * Qiyue Zhu	     - 	zhu72
 * Zhuoyuan Li	     -  li156	
+
+##Live Deploy
+A live deployment(albeit with a smaller and outdated db) can be seen on [Heroku](http://stark-inlet-2958.herokuapp.com/)
