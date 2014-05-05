@@ -5,10 +5,17 @@
 
 class Alerter < ActionMailer::Base
 
+
+  ##
+  # Used for testing...
+  #
+  def gmail_message
+  	mail(:to => "to@example.org", :subject => "Gmail message", :body => "Hi", :from => "from@example.com")
+  end
+
   ##
   # Given a user, and a game sale, sends out an alert message to that user's email address, notifying them of the sale
   #
-
   def alert_message(user,game_sale)
     @user = user
     @game_sale = game_sale
