@@ -10,35 +10,7 @@ describe GamersGateHelper do
 	it "should return true because url is a proper game list page" do
 		url = "http://www.gamersgate.com/games?state=available&pg=1"
 		expect(GamersGateHelper.parse_menu_page(url)).to eq(true)
-	end
-
-	it "should return correct sales data for the game 'The Last Federation'" do
-		url = "http://www.gamersgate.com/games?state=available&pg=1"
-		f = RestClient.get(url)
-		doc = Nokogiri::HTML(f)
-		games = doc.css('div.product_display')
-		
-		game = nil
-		games.each do |each_game|
-			if GamersGateHelper.parse_name(each_game) == "The Last Federation"
-				game = each_game
-				break
-			end
-		end
-
-		expect(game).not_to eq(nil)
-
-		if game != nil
-			expect(GamersGateHelper.parse_name(game)).to eq("The Last Federation")
-			expect(GamersGateHelper.parse_current_price(game)).to eq(14.99)
-			
-			game_url = GamersGateHelper.parse_game_url(game)
-			expect(game_url).to eq("http://www.gamersgate.com/DD-TLF/the-last-federation")		
-			
-			expect(GamersGateHelper.is_on_sale(game)).to eq(true)
-		end
-
-	end
+	end	
 
 	it "should accurately parse original price data for 'The Last Federation'" do
 		# The Last Federation on GamersGate

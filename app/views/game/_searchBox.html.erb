@@ -14,10 +14,16 @@
 					<%= radio_button_tag(:method, '2') %>
 					Rating: Low to High
 					<br>
-					Filter for Ratings: 
-					<%= text_field_tag(:low, 0, { size: 10 }) %>
+					Filter for Ratings:
+					<% if params[:low] == nil %>
+						<% params[:low] = 0 %>
+					<% end %>
+					<% if params[:high] == nil %>
+						<% params[:high] = 100 %>
+					<% end %>
+					<%= text_field_tag(:low, params[:low], { size: 10 }) %>
 					to
-					<%= text_field_tag(:high, 100, { size: 10}) %>
+					<%= text_field_tag(:high, params[:high], { size: 10}) %>
 				</div>
 				<div style="width:40%">
             		Genres:

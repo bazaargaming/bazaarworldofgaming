@@ -8,25 +8,30 @@ module GamersGateHelper
 	
 
 	
-
+	#function that parse the title of a game from a html row
 	def self.parse_name(row)
 		return row.css('a[class = ttl]')[0]["title"]
 	end
 
-
+	#function that parse the current price of a game from a html row
 	def self.parse_current_price(row)
 		price = row.css('span.prtag').text
 		return price.delete("$").to_f		
 	end
 
+	#function that parse the url of a game page from the game's html row
 	def self.parse_game_url(row)
 		return row.css('a[class = ttl]')[0]['href']
 	end
 
+	##given a html row of a game, determins whether the game is on sale
+	# by checking whether the price tag is painted red in it
 	def self.is_on_sale(row)
 		return row.css('span.redbg')[0] != nil
 	end
 
+	##parse the original price of a game from the html doc of its game page
+	# only called when a game is on sale
 	def self.parse_orig_price(doc)
 		price_tag = doc.css('div.price_list').css('span.prtag')
 		return price_tag.text.delete("$").to_f
@@ -34,11 +39,13 @@ module GamersGateHelper
 	end
 
 
-
+	#parse the description of a game from the html doc of its game page
 	def self.parse_description(doc)
 		return doc.css('meta[name = description]')[0]['content']
 	end
 
+	##parse the genres of a game from the html doc of its game page
+	# returns a list of strings
 	def self.parse_genres(doc)
 		genres_list = []
 		genres_row = doc.search"[text()*='Categories:']"
@@ -53,6 +60,8 @@ module GamersGateHelper
 		
 	end
 
+	##parse the developer of a game from the html doc of its game page
+	# returns nil if there's no developer info on the page
 	def self.parse_developer(doc)
 		developer_row = doc.search"[text()*='Developer:']"
 		if (developer_row.first == nil)
@@ -63,6 +72,8 @@ module GamersGateHelper
 		
 	end
 
+	##parse the publisher of a game from the html doc of its game page
+	# returns nil if there's no publisher info on the page
 	def self.parse_publisher(doc)
 		publisher_row = doc.search"[text()*='Publisher:']"
 		if (publisher_row.first == nil)
@@ -73,12 +84,13 @@ module GamersGateHelper
 		
 	end
 
-
+	##use the orginal price, sale price and the sale link
+	# creates game sale and game sale history for corresponded game
   	def self.storeSalesData(original_price, sale_price, game, sale_link)
   		
-    		gmg_sales = game.game_sales.where(["store = ?", "GamersGate"])
+    		gamers_gate_sales = game.game_sales.where(["store = ?", "GamersGate"])
 
-    		if gmg_sales == nil or gmg_sales.length == 0
+    		if gamers_gate_sales == nil or gamers_gate_sales.length == 0
 
           		game_sale = game.game_sales.create!(store: "GamersGate", 
                                              		    url: sale_link, 
@@ -93,13 +105,20 @@ module GamersGateHelper
     		end
   	end
 
+  	#parse the url of the boxart from the html doc of a game page
 	def self.parse_boxart(doc)
 		return doc.css('meta[itemprop = image]')[0]['content']
 	
 	end
 
 	
-
+	##use the url of a menu page, parse all the games on this page
+	# first extract all the rows of game infos
+	# then for each row, parse its title, price and game link
+	# if the game is on sale, use the game page to parse its original price
+	# creates new games if couldn't find the game in database (not using now)
+	# create and add game sale and game sale histrory to the database
+	# returns false if there's no games on this page
 	def self.parse_menu_page(url)
 		f = RestClient.get(url)
 		doc = Nokogiri::HTML(f)
@@ -174,6 +193,9 @@ module GamersGateHelper
 
 	end
 
+	##use the url base to iterate through all the menu pages on GamersGate.com
+	# for each menu page, call parse_menu_page to parse all games
+	# stops when parse_menu_page returns false
 	def self.parse_ggate_site
 
 		page_number = 1
