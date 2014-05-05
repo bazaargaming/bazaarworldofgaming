@@ -1,58 +1,6 @@
 require 'spec_helper'
 
 describe GameSearchHelper do
-=begin
-	it "should have two halo games" do
-		# puts "number of games: " + Game.all.size.to_s
-		games_list = GameSearchHelper.find_game("halo")
-		
-		puts
-		games_list.each do |game|
-			puts game[:search_title]
-		end
-		puts
-
-		expect(games_list.first[:search_title]).to eq("halo combat evolved")
-		expect(games_list.second[:search_title]).to eq("halo 2")
- 	end
-
- 	it "should have 8 command and conquer games" do
-		# puts "number of games: " + Game.all.size.to_s
-		games_list = GameSearchHelper.find_game("command & conquer")
-		
-		puts
-		games_list.each do |game|
-			puts game[:search_title]
-		end
-		puts
-
-		expect(games_list.size).to eq(8)
- 	end
-
- 	it "should return the most relevant one first" do
-		# puts "number of games: " + Game.all.size.to_s
-		games_list = GameSearchHelper.find_game("command conquer tiberian sun")
-		expect(games_list.first[:search_title]).to eq("command conquer tiberian sun")
- 	end
-
- 	describe "Tests for function getGameLisPartialMatch" do
-
- 		it "should have more relevant games on the top of the list" do
-	 		words_list = ["command", "conquer", "red", "alert"]
-	 		games_list = GameSearchHelper.get_game_lis_partial_match(words_list)
-	 		
-			puts
-	 		games_list.each do |game|
-				puts game[:search_title]
-			end
-			puts
-
-			games_list.first[:search_title].should include("command conquer red alert")
-			games_list.second[:search_title].should include("command conquer red alert")
- 		end
-
- 	end
-=end
 
  	describe "Tests for function handleColon" do
 
@@ -95,15 +43,7 @@ describe GameSearchHelper do
  	describe "filtering and sorting" do
  		let(:user) {FactoryGirl.create(:user)}
  		describe "find and filter games" do
-=begin
- 			it "should filter out already owned games" do
- 				games_list = GameSearchHelper.find_game("halo")
- 				user.games << games_list[0]
- 				puts user.games
- 				filtered_list = GameSearchHelper.find_and_filter_games("halo", user)
- 				expect(filtered_list.include?(games_list[0])).to be_false 
- 			end
-=end
+
  			it "should filter games by metacritic" do
  				lowscore = Game.create(title: "test", search_title: "test", metacritic_rating: "40")
  				highscore = Game.create(title: "test2", search_title: "test2", metacritic_rating: "100")

@@ -61,9 +61,9 @@ describe StringHelper do
  	end
 
  	it "should get rid of '&'" do
-		original_title = "Command&Conquer: Red Alert 3"
+		original_title = "Command & Conquer: Red Alert 3"
 		search_title = StringHelper.create_search_title(original_title)
-		expect(search_title).to eq("command conquer red alert 3")
+		expect(search_title).to eq("command and conquer red alert 3")
  	end
 
  	it "should get rid of '.'" do

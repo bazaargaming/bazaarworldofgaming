@@ -85,9 +85,14 @@ describe PriceHistoryHelper do
 	}
 
 	it "should keep only three sales histories" do
-		expect(@game.game_sale_histories.load.size).to eq(6)
 		histories = PriceHistoryHelper.get_sales_histories(@game)
-		expect(@game.game_sale_histories.load.size).to eq(3)
+		expect(@game.game_sale_histories.load.size).to eq(6)
+	end
+
+	it "should get cheapest price" do
+		histories = PriceHistoryHelper.get_sales_histories(@game)
+		cheapestPrice = 9.95
+		expect((histories[0])[:price]).to eq(cheapestPrice)
 	end
 
 	it "should have the cheaper sale histories from Steam" do
@@ -99,19 +104,17 @@ describe PriceHistoryHelper do
 	end
 
 	it "should have the cheaper sale histories from Amazon" do
-		histories = PriceHistoryHelper.get_sales_histories(@game)
 		vendor = "Amazon"
 		cheapestSale = @game.game_sale_histories.where("Store=?", vendor)
 		cheapestPrice = 27.49
-		expect((cheapestSale[0])[:price]).to eq(cheapestPrice)
+		expect((cheapestSale[1])[:price]).to eq(cheapestPrice)
 	end
 
 	it "should have the cheaper sale histories from GMG" do
-		histories = PriceHistoryHelper.get_sales_histories(@game)
 		vendor = "GMG"
 		cheapestSale = @game.game_sale_histories.where("Store=?", vendor)
 		cheapestPrice = 4.95
-		expect((cheapestSale[0])[:price]).to eq(cheapestPrice)
+		expect((cheapestSale[1])[:price]).to eq(cheapestPrice)
 	end
 
 	it "should have the cheapest sale histories from Steam" do
@@ -124,11 +127,10 @@ describe PriceHistoryHelper do
 			updated_at: "2014-03-17 05:27:33.981802"
 		}
 		@game.game_sale_histories.create(@saleSteam3)
-		histories = PriceHistoryHelper.get_sales_histories(@game)
 		vendor = "Steam"
 		cheapestSale = @game.game_sale_histories.where("Store=?", vendor)
 		cheapestPrice = 9.99
-		expect((cheapestSale[0])[:price]).to eq(cheapestPrice)
+		expect((cheapestSale[2])[:price]).to eq(cheapestPrice)
 	end
 	
 end
