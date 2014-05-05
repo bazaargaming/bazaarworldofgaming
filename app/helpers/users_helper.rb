@@ -1,3 +1,4 @@
+#This module is used to format a user's data so that it can easily be displayed on the user's profile page
 module UsersHelper
 
 	# This fuction, upon recieving a user, will use the user's email address to

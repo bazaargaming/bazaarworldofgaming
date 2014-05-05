@@ -52,7 +52,8 @@ This will probably take a while so be patient. Once you have ruby installed thro
 
 ##Running the app
 
-Since the github has an up to date database you will not need to seed the games data. Instructions on setting up a fresh db will be at the bottom of this document. 
+Since the github has a populated games database, you will not need to worry about seeding the site with games. Pre-existing sales data is also included, but it may be out of date by the time you read this. If you wish to have up to date sales data and/or add new game releases to the games database, please refer to the Adding Data section. Instructions on setting up a fresh db will be at the bottom of this document. 
+
 
 Running the app is fairly simple.
 
@@ -61,19 +62,29 @@ Running the app is fairly simple.
 
 Thats it, you can now navigate to http://localhost:3000 and navigate the app
 
-##Seeding Data
+##Adding Data
 
-###Seeding/Adding Sales Data
+###Adding Sales Data
 
-This can be done with 
+1. Run `rails runner DailyParseHelper.parse_all`. You should probably do this in a separate terminal window as this is a long-running process. 
 
-`rails runner DailyParseHelper.parse_all`
 
-###Seeding/Adding Games Data
+2. Alternatively, if you want to only run the parser for a certain vendor, you can do the following:
 
-This can be done with 
+  * GameSale.where(:store => "INSERT STORE NAME HERE").destroy_all
+  * Then, for each of the vendors, do the corresponding action:
+            ** Amazon: 'rails runner AmazonHelper.parse_amazon_site'
+            ** Steam: 'rails runner SteamHelper.parse_steam_site'
+            ** Green-Man-Gaming: 'GmgHelper.parse_gmg_site'
+            ** Gamers Gate: 'GamersGateHelper.parse_ggate_site'
 
-`bundle exec rake db:seed`
+  * Then, if you want to send any alerts out, run the following: 'rails runner AlertHelper.send_alerts'
+
+
+###Adding Games Data
+
+1. Run `bundle exec rake db:seed`. You should probably do this in a separate terminal window as this is a long-running process. 
+
 
 ##Development Stuff
 If you ever change the schema of the database you will need run `bundle exec rake db:migrate`

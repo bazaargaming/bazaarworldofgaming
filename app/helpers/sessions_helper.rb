@@ -1,3 +1,4 @@
+# This module is responsible for creating/destroying cookies and controlling the current user variable.
 module SessionsHelper
 
 	# This function creates a cookie for the current user session and sets the variable current_user

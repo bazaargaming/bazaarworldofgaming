@@ -62,18 +62,3 @@ require 'timeout'
 end
 
 
-	SteamHelper.extract_page_info("http://store.steampowered.com/app/8870/")
-	SteamHelper.extract_page_info("http://store.steampowered.com/app/72850/")
-	SteamHelper.extract_page_info("http://store.steampowered.com/app/8930/")
-	SteamHelper.extract_page_info("http://store.steampowered.com/app/242050/")
-	SteamHelper.extract_page_info("http://store.steampowered.com/app/265930/")
-
-	GmgHelper.getSalePageInfo("http://www.greenmangaming.com/s/us/en/pc/games/shooter/bioshock-infinite-na/")
-	GmgHelper.getSalePageInfo("http://www.greenmangaming.com/s/us/en/pc/games/rpgs/elder-scrolls-v-skyrim/")
-	GmgHelper.getSalePageInfo("http://www.greenmangaming.com/s/us/en/pc/games/strategy/sid-meiers-civilization-v/")
-	GmgHelper.getSalePageInfo("http://www.greenmangaming.com/s/us/en/pc/games/simulation/goat-simulator/")
-	GmgHelper.getSalePageInfo("http://www.greenmangaming.com/s/us/en/pc/games/action/assassins-creed-iv-black-flag-na/")
-
-
-	AmazonHelper.parse_amazon_site
-	GamersGateHelper.parse_ggate_site
