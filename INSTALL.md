@@ -36,10 +36,15 @@ Once you have rvm you need to install all the requirements for ruby, this can be
 
 If this doesn't work you may need to manually install some librarys. These could be 
 
+
 *libtool
+
 *libxslt
+
 *libksba
+
 *openssl
+
 *libyaml-dev
 
 this step is fairly system dependent and may take some googling to find someone that may have a similar setup.
@@ -87,7 +92,7 @@ Thats it, you can now navigate to http://localhost:3000 and navigate the app
 
 ###Adding Games Data
 
-1. Run `bundle exec rake db:seed`. You should probably do this in a separate terminal window as this is a long-running process. 
+Run `bundle exec rake db:seed`. You should probably do this in a separate terminal window as this is a long-running process. 
 
 
 ##Development Stuff
