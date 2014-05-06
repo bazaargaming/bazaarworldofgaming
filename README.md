@@ -23,4 +23,4 @@ The contributors to this project are in no particular order
 * Zhuoyuan Li	     -  li156	
 
 ##Live Deploy
-A live deployment(albeit with a smaller and outdated db) can be seen on [Heroku](http://bazaarworldofgaming.herokuapp.com/)
+A live deployment(albeit with a smaller and outdated db) can be seen on [Heroku](http://bazaarworldofgames.herokuapp.com/)
