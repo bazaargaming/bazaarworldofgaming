@@ -88,6 +88,9 @@ Thats it, you can now navigate to http://localhost:3000 and navigate the app
 
 ###Adding Games Data
 
+
+Copy the contents of the file db/game_and_metacritic_parser.rb into db/seeds.rb.
+
 Run `bundle exec rake db:seed`. You should probably do this in a separate terminal window as this is a long-running process. 
 
 
